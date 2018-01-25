@@ -1,0 +1,4 @@
+includeFlat 'de.upb.debis.openapi.model'
+includeFlat 'de.upb.debis.json2owl'
+includeFlat 'de.upb.debis.astro'
+includeFlat 'de.upb.debis.astro.ui'
