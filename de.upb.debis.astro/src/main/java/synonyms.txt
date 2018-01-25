@@ -1,0 +1,22 @@
+#https://lucene.apache.org/core/7_1_0/analyzers-common/org/apache/lucene/analysis/synonym/SolrSynonymParser.html
+id => identifier, id
+slug => identifier, id
+title => name, title
+desc => description
+descr => description
+info => description, info
+long => longitude, long
+lon => longitude
+lng => longitude
+lat => latitude
+you tube, youtube => video, youtube
+link => url, link
+homepage => url, homepage
+website => url, website
+web => url, web
+site => url, site
+max => maximum, max
+min => minimum, min
+update => modified
+creation => created
+items => collection
