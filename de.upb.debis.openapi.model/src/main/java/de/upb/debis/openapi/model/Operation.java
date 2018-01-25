@@ -5,6 +5,7 @@ package de.upb.debis.openapi.model;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import de.upb.debis.openapi.model.PathParameterSubSchema;
 
 /**
  * <!-- begin-user-doc -->
@@ -336,5 +337,6 @@ public interface Operation extends EObject {
 	 * @generated
 	 */
 	EList<VendorExtension> getVendorExtension();
+
 
 } // Operation
