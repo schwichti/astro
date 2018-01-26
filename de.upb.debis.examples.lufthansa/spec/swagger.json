@@ -1,0 +1,283 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "LH Public API",
+    "description": "",
+    "license": {
+      "name": "LH",
+      "url": "https://developer.lufthansa.com"
+    }
+  },
+  "host": "api.lufthansa.com",
+  "basePath": "/v1",
+  "securityDefinitions": {
+    "auth": {
+      "type": "oauth2",
+      "scopes": {
+        "read:LH Open API": "read access"
+      },
+      "flow": "accessCode",
+      "authorizationUrl": "https://api.lufthansa.com/v1/oauth/token",
+      "tokenUrl": "https://api.lufthansa.com/v1/oauth/token"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/operations/schedules/{origin}/{destination}/{fromDateTime}": {
+      "get": {
+        "description": "Scheduled flights between given airports on a given date.",
+        "summary": "Flight Schedules",
+        "tags": [
+          "Operations"
+        ],
+        "operationId": "OperationsSchedulesFromDateTimeByOriginAndDestinationGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Departure airport. 3-letter IATA airport code (e.g. 'ZRH')"
+          },
+          {
+            "name": "destination",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Destination airport. 3-letter IATA airport code (e.g. 'FRA')"
+          },
+          {
+            "name": "fromDateTime",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Local departure date and optionally departure time (YYYY-MM-DD or YYYY-MM-DDTHH:mm). When not provided, time is assumed to be 00:01"
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "http header: application/json or application/xml (Acceptable values are: \"application/json\", \"application/xml\")"
+          },
+          {
+            "name": "directFlights",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "description": "Show only direct flights (false=0, true=1). Default is false"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Number of records returned per request. Defaults to 20, maximum is 100 (if a value bigger than 100 is given, 100 will be taken)"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Number of records skipped. Defaults to 0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "application/json": {
+                "ScheduleResource": {
+                  "Schedule": [
+                    {
+                      "TotalJourney": {
+                        "Duration": "PT1H5M"
+                      },
+                      "Flight": {
+                        "Departure": {
+                          "AirportCode": "PAD",
+                          "ScheduledTimeLocal": {
+                            "DateTime": "2018-02-24T06:05"
+                          }
+                        },
+                        "Arrival": {
+                          "AirportCode": "MUC",
+                          "ScheduledTimeLocal": {
+                            "DateTime": "2018-02-24T07:10"
+                          },
+                          "Terminal": {
+                            "Name": 2
+                          }
+                        },
+                        "MarketingCarrier": {
+                          "AirlineID": "LH",
+                          "FlightNumber": 2183
+                        },
+                        "OperatingCarrier": {
+                          "AirlineID": "CL"
+                        },
+                        "Equipment": {
+                          "AircraftCode": "CR9"
+                        },
+                        "Details": {
+                          "Stops": {
+                            "StopQuantity": 0
+                          },
+                          "DaysOfOperation": 123456,
+                          "DatePeriod": {
+                            "Effective": "2018-01-29",
+                            "Expiration": "2018-03-24"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "TotalJourney": {
+                        "Duration": "PT1H5M"
+                      },
+                      "Flight": {
+                        "Departure": {
+                          "AirportCode": "PAD",
+                          "ScheduledTimeLocal": {
+                            "DateTime": "2018-02-24T09:30"
+                          }
+                        },
+                        "Arrival": {
+                          "AirportCode": "MUC",
+                          "ScheduledTimeLocal": {
+                            "DateTime": "2018-02-24T10:35"
+                          },
+                          "Terminal": {
+                            "Name": 2
+                          }
+                        },
+                        "MarketingCarrier": {
+                          "AirlineID": "LH",
+                          "FlightNumber": 2177
+                        },
+                        "OperatingCarrier": {
+                          "AirlineID": "CL"
+                        },
+                        "Equipment": {
+                          "AircraftCode": "CR9"
+                        },
+                        "Details": {
+                          "Stops": {
+                            "StopQuantity": 0
+                          },
+                          "DaysOfOperation": 1234567,
+                          "DatePeriod": {
+                            "Effective": "2018-01-28",
+                            "Expiration": "2018-03-24"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "TotalJourney": {
+                        "Duration": "PT1H5M"
+                      },
+                      "Flight": {
+                        "Departure": {
+                          "AirportCode": "PAD",
+                          "ScheduledTimeLocal": {
+                            "DateTime": "2018-02-24T19:55"
+                          }
+                        },
+                        "Arrival": {
+                          "AirportCode": "MUC",
+                          "ScheduledTimeLocal": {
+                            "DateTime": "2018-02-24T21:00"
+                          },
+                          "Terminal": {
+                            "Name": 2
+                          }
+                        },
+                        "MarketingCarrier": {
+                          "AirlineID": "LH",
+                          "FlightNumber": 2181
+                        },
+                        "OperatingCarrier": {
+                          "AirlineID": "CL"
+                        },
+                        "Equipment": {
+                          "AircraftCode": "CR9"
+                        },
+                        "Details": {
+                          "Stops": {
+                            "StopQuantity": 0
+                          },
+                          "DaysOfOperation": 124567,
+                          "DatePeriod": {
+                            "Effective": "2018-02-16",
+                            "Expiration": "2018-03-24"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "Meta": {
+                    "@Version": "1.0.0",
+                    "Link": [
+                      {
+                        "@Href": "https://api.lufthansa.com/v1/operations/schedules/PAD/MUC/2018-02-24?directFlights=0",
+                        "@Rel": "self"
+                      },
+                      {
+                        "@Href": "https://api.lufthansa.com/v1/operations/schedules/PAD/MUC/2018-02-23?directFlights=0&offset=0&limit=20",
+                        "@Rel": "previousRange"
+                      },
+                      {
+                        "@Href": "https://api.lufthansa.com/v1/operations/schedules/PAD/MUC/2018-02-24?directFlights=0&offset=20&limit=20",
+                        "@Rel": "next"
+                      },
+                      {
+                        "@Href": "https://api.lufthansa.com/v1/operations/schedules/PAD/MUC/2018-02-28T20:15?directFlights=0&offset=0&limit=20",
+                        "@Rel": "nextRange"
+                      },
+                      {
+                        "@Href": "https://api.lufthansa.com/v1/references/airports/{airportCode}",
+                        "@Rel": "related"
+                      },
+                      {
+                        "@Href": "https://api.lufthansa.com/v1/references/aircraft/{aircraftCode}",
+                        "@Rel": "related"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
+        "x-unitTests": [],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    }
+  }
+}
