@@ -311,6 +311,28 @@ class OWLUtil {
 		return getLiteral(subject.model, subject, predicate);
 	}
 	
+	public static def List<Resource> getResource(Resource subject, Property predicate){
+		
+		var result = new ArrayList<Resource>();
+		
+		var model = subject.model;
+		
+		
+		for(var iter = model.listStatements(subject, predicate, null as RDFNode); iter.hasNext;){
+			
+			var stmt = iter.next;
+			
+			if(stmt.object.isResource){
+				
+				result.add(stmt.object.asResource);	
+			}
+			
+		}
+		
+		return result;
+		
+	}
+	
 	public static def String getLiteral(Model model, Resource subject, Property predicate){
 		
 		
