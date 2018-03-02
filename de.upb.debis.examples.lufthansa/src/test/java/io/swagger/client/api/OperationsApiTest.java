@@ -25,23 +25,42 @@
 
 package io.swagger.client.api;
 
+import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
+import io.swagger.client.Configuration;
+import io.swagger.client.auth.OAuth;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.schema.Airport;
+import org.schema.Flight;
+
+import de.upb.dbis.astro.adapter.Adapter;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * API tests for OperationsApi
  */
 public class OperationsApiTest {
 
-    private final OperationsApi api = new OperationsApi();
+    private OperationsApi api;
+    @Before
+    public void setUp() throws Exception {
+    	
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure OAuth2 access token for authorization: auth
+        OAuth auth = (OAuth) defaultClient.getAuthentication("auth");
+        auth.setAccessToken("YOUR ACCESS TOKEN");//FIXME Set access token
 
+        api = new OperationsApi();
+    }
     
     /**
      * Flight Schedules
@@ -55,16 +74,40 @@ public class OperationsApiTest {
     public void operationsSchedulesFromDateTimeByOriginAndDestinationGetTest() throws ApiException {
         String origin = "PAD";
         String destination = "MUC";
-        String fromDateTime = "2018-02-24";
+        String fromDateTime = "2018-03-15";
         String accept = "application/json";
-        Boolean directFlights = null;
-        String limit = null;
-        String offset = null;
+        Boolean directFlights = false;
+        String limit = "10";
+        String offset = "0";
         String response = api.operationsSchedulesFromDateTimeByOriginAndDestinationGet(origin, destination, fromDateTime, accept, directFlights, limit, offset);
-
-        
+               
         assertTrue(response!=null);
         // TODO: test validations
     }
+    
+    @Test
+    public void operationsSchedulesFromDateTimeByOriginAndDestinationGetTest2() throws ApiException, ParseException {
+        
+
+        Airport owls_origin = new Airport();
+        owls_origin.setIataCode("PAD");
+        
+        Airport owls_destination = new Airport();
+        owls_destination.setIataCode("MUC");
+        
+        String testDate = "2018-03-15";
+        DateFormat formatter = new SimpleDateFormat("y-M-d");
+        Date owls_fromDataTime = formatter.parse(testDate);
+        
+        
+        Adapter adapter = new Adapter();
+        Flight response = adapter.operationsSchedulesFromDateTimeByOriginAndDestinationGet(owls_origin, owls_destination, owls_fromDataTime);
+        
+        System.out.println(response);
+        assertTrue(response!=null);
+        
+    }
+    
+    
     
 }

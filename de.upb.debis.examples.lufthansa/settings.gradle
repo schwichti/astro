@@ -1,1 +1,3 @@
-rootProject.name = "swagger-java-client"
+rootProject.name = "de.upb.debis.examples.lufthansa"
+includeFlat 'org.schema'
+
