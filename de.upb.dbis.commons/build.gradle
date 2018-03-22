@@ -1,0 +1,12 @@
+plugins {
+  id "org.xtext.xtend" version "1.0.21"
+}
+dependencies {
+	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: '2.13.0'
+	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: '2.13.0'
+	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib.macro', version: '2.13.0'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
+

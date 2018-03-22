@@ -1,0 +1,21 @@
+plugins {
+  id "org.xtext.xtend" version "1.0.21"
+}
+dependencies {
+	//compile group: 'org.apache.jena', name: 'jena-core', version: '3.6.0'
+	//compile group: 'org.apache.jena', name: 'jena-base', version: '3.6.0'
+	
+	compile group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.6.0'
+	
+	compile 'com.google.guava:guava:21.0'
+	
+	compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '7.2.1'
+	compile group: 'org.apache.lucene', name: 'lucene-core', version: '7.2.1'
+	compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '7.2.1'
+	
+	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: '2.13.0'
+	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: '2.13.0'
+	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib.macro', version: '2.13.0'
+	
+  testImplementation 'junit:junit:4.12'
+}
