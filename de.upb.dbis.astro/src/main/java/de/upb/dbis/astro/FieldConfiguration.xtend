@@ -1,6 +1,7 @@
 package de.upb.dbis.astro
 
 import org.apache.lucene.analysis.Analyzer
+import java.util.Map
 
 class FieldConfiguration {
 	
@@ -29,7 +30,7 @@ class FieldConfiguration {
 	}
 	
 	public def getEnabled(){
-		return enabled;
+		return weight>0;
 	}
 	
 	public def getWeight(){
@@ -40,11 +41,14 @@ class FieldConfiguration {
 		return analyzer;
 	}
 	
-	new(String id, boolean enabled, float weight, Analyzer analyzer){
+	new(String id, Map<String, Float> weights, Analyzer analyzer){
 		
 		this.id= id;
-		this.enabled = enabled;
 		this.weight = weight;
 		this.analyzer = analyzer;
+		//TODO check if key exists
+		
+		//this.weight = 1f;
+		this.weight = weights.get(id);
 	}
 }

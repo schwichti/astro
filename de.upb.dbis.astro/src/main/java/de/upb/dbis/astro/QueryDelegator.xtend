@@ -48,28 +48,28 @@ class QueryDelegator {
 	
 	private static int CUTOFF = 100;
 	
-	private static String FIELD_CLASS_LABEL = "clabel";
-	private static String FIELD_CLASS_COMMENT = "ccomment";
-	private static String FIELD_CLASS_SUPER = "csuper";
-	private static String FIELD_CLASS_SUB = "csub";
-	private static String FIELD_CLASS_PROPERTIES = "cproperties";
-	private static String FIELD_PROPERTY_LABEL = "plabel";
-	private static String FIELD_OBJECT_LABEL = "olabel";
-	private static String FIELD_PROPERTY_COMMENT = "pcomment";
-	private static String FIELD_CLASS_URI = "curi";
-	private static String FIELD_PROPERTY_URI = "puri";
-	private static String FIELD_OBJECT_URI = "ouri";
-	private static String FIELD_CONCEPTNET_RELATED = "cnrelated";
-	private static String FIELD_CONCEPTNET_SYNONYM = "cnsynonym";
+	public static String FIELD_CLASS_LABEL = "clabel";
+	public static String FIELD_CLASS_COMMENT = "ccomment";
+	public static String FIELD_CLASS_SUPER = "csuper";
+	public static String FIELD_CLASS_SUB = "csub";
+	public static String FIELD_CLASS_PROPERTIES = "cproperties";
+	public static String FIELD_PROPERTY_LABEL = "plabel";
+	public static String FIELD_OBJECT_LABEL = "olabel";
+	public static String FIELD_PROPERTY_COMMENT = "pcomment";
+	public static String FIELD_CLASS_URI = "curi";
+	public static String FIELD_PROPERTY_URI = "puri";
+	public static String FIELD_OBJECT_URI = "ouri";
+	public static String FIELD_CONCEPTNET_RELATED = "cnrelated";
+	public static String FIELD_CONCEPTNET_SYNONYM = "cnsynonym";
 	
-	private static String FIELD_RESOURCE_LABEL = "resource_label";
-	private static String FIELD_JSONPATH = "jsonpath";
-	private static String FIELD_OPERATION_ID = "operation_id";
-	private static String FIELD_OPERATION_DESCRIPTION = "operation_description";
-	private static String FIELD_SERVICE_DESCRIPTION = "service_description";
-	private static String FIELD_PARAMETER_DESCRIPTION = "parameter_description";
-	private static String FIELD_ALL_PROPERTIES = "properties";
-	private static String FIELD_ALL_INPUTS = "inputs";
+	public static String FIELD_RESOURCE_LABEL = "resource_label";
+	public static String FIELD_JSONPATH = "jsonpath";
+	public static String FIELD_OPERATION_ID = "operation_id";
+	public static String FIELD_OPERATION_DESCRIPTION = "operation_description";
+	public static String FIELD_SERVICE_DESCRIPTION = "service_description";
+	public static String FIELD_PARAMETER_DESCRIPTION = "parameter_description";
+	public static String FIELD_ALL_PROPERTIES = "properties";
+	public static String FIELD_ALL_INPUTS = "inputs";
 	
 	private String service_description = "";
 	private String operation_name = "";
@@ -80,6 +80,8 @@ class QueryDelegator {
 	private Analyzer analyzer_conceptnet = null;
 	private Analyzer analyzer_conceptnet_synonym = null;
 	
+	private Map<String, Float> weights;
+	
 	private List<FieldConfiguration> index_fields = new ArrayList<FieldConfiguration>();
 	private List<FieldConfiguration> query_fields = new ArrayList<FieldConfiguration>();
 	
@@ -87,6 +89,36 @@ class QueryDelegator {
 	private Model offer;
 	private Model domain;
 	private Model global;
+	
+	new(Map<String, Float> weights){
+	
+		this.weights = weights;
+	}
+	
+	new(){
+		this.weights = #{
+			FIELD_CLASS_LABEL -> 7f,
+			FIELD_CLASS_COMMENT -> 2f,
+			FIELD_CLASS_SUPER -> 4f,
+			FIELD_CLASS_SUB -> 5f,
+			FIELD_CLASS_PROPERTIES -> 9f,
+			FIELD_PROPERTY_LABEL -> 6f,
+			FIELD_PROPERTY_COMMENT -> 3f,
+			FIELD_OBJECT_LABEL -> 7f,
+			FIELD_CONCEPTNET_RELATED -> 11f,
+			FIELD_CONCEPTNET_SYNONYM -> 10f,
+			
+			FIELD_RESOURCE_LABEL->6f,
+			FIELD_JSONPATH -> 5f,
+			FIELD_PARAMETER_DESCRIPTION -> 5f,
+			FIELD_OPERATION_ID -> 4f,
+			FIELD_OPERATION_DESCRIPTION-> 0f,
+			FIELD_SERVICE_DESCRIPTION -> 0f,
+			FIELD_ALL_PROPERTIES -> 0f,
+			FIELD_ALL_INPUTS -> 1f
+		}
+
+	}
 	
 	public def Alignment align(){
 		
@@ -194,7 +226,7 @@ class QueryDelegator {
 				terms = normalize(field.analyzer, input);
 				
 				if(!terms.empty){
-					terms.removeAll(duplicates);
+					//terms.removeAll(duplicates);
 					query.put(terms, field.weight);
 					duplicates.addAll(terms);
 					
@@ -287,7 +319,7 @@ class QueryDelegator {
 	}
 	
 	public def init(){
-		index = new RAMDirectory();
+		
 		
 		//index = FSDirectory.open(Paths.get("index.lucene"));
 		
@@ -364,27 +396,28 @@ class QueryDelegator {
 			.addTokenFilter(StopFilterFactory, "ignoreCase", "true", "words", "stopwords.txt", "format", "wordset")
 			.build();			
 		
-		index_fields.add(new FieldConfiguration(FIELD_CLASS_LABEL, true, 7f, analyzer_id));
-		index_fields.add(new FieldConfiguration(FIELD_CLASS_COMMENT, true, 2f, analyzer_text));
-		index_fields.add(new FieldConfiguration(FIELD_CLASS_SUPER, true, 4f, analyzer_id));
-		index_fields.add(new FieldConfiguration(FIELD_CLASS_SUB, true, 5f, analyzer_id));
-		index_fields.add(new FieldConfiguration(FIELD_CLASS_PROPERTIES, true, 9f, analyzer_id));
-		index_fields.add(new FieldConfiguration(FIELD_PROPERTY_LABEL, true, 6f, analyzer_id));
-		index_fields.add(new FieldConfiguration(FIELD_PROPERTY_COMMENT, true, 3f, analyzer_text));
-		index_fields.add(new FieldConfiguration(FIELD_OBJECT_LABEL, true, 7f, analyzer_text));
-		index_fields.add(new FieldConfiguration(FIELD_CONCEPTNET_RELATED, true, 11f, analyzer_conceptnet));
-		index_fields.add(new FieldConfiguration(FIELD_CONCEPTNET_SYNONYM, true, 10f, analyzer_conceptnet_synonym));
 		
-		query_fields.add(new FieldConfiguration(FIELD_RESOURCE_LABEL, true, 6f, analyzer_id));
-		query_fields.add(new FieldConfiguration(FIELD_JSONPATH, true, 5f, analyzer_id));
-		query_fields.add(new FieldConfiguration(FIELD_PARAMETER_DESCRIPTION, true, 5f, analyzer_text));
-		query_fields.add(new FieldConfiguration(FIELD_OPERATION_ID, true, 4f, analyzer_id));
-		query_fields.add(new FieldConfiguration(FIELD_OPERATION_DESCRIPTION, false, 3f, analyzer_text));
-		query_fields.add(new FieldConfiguration(FIELD_SERVICE_DESCRIPTION, false, 2f, analyzer_text));
-		query_fields.add(new FieldConfiguration(FIELD_ALL_PROPERTIES, false, 1f, analyzer_id));
-		query_fields.add(new FieldConfiguration(FIELD_ALL_INPUTS, true, 1f, analyzer_id));
-
+		index_fields.add(new FieldConfiguration(FIELD_CLASS_LABEL, weights, analyzer_id));
+		index_fields.add(new FieldConfiguration(FIELD_CLASS_COMMENT, weights, analyzer_text));
+		index_fields.add(new FieldConfiguration(FIELD_CLASS_SUPER, weights, analyzer_id));
+		index_fields.add(new FieldConfiguration(FIELD_CLASS_SUB, weights, analyzer_id));
+		index_fields.add(new FieldConfiguration(FIELD_CLASS_PROPERTIES, weights, analyzer_id));
+		index_fields.add(new FieldConfiguration(FIELD_PROPERTY_LABEL, weights, analyzer_id));
+		index_fields.add(new FieldConfiguration(FIELD_PROPERTY_COMMENT, weights, analyzer_text));
+		index_fields.add(new FieldConfiguration(FIELD_OBJECT_LABEL, weights, analyzer_text));
+		index_fields.add(new FieldConfiguration(FIELD_CONCEPTNET_RELATED, weights, analyzer_conceptnet));
+		index_fields.add(new FieldConfiguration(FIELD_CONCEPTNET_SYNONYM, weights, analyzer_conceptnet_synonym));
 		
+		query_fields.add(new FieldConfiguration(FIELD_RESOURCE_LABEL, weights, analyzer_id));
+		query_fields.add(new FieldConfiguration(FIELD_JSONPATH, weights, analyzer_id));
+		query_fields.add(new FieldConfiguration(FIELD_PARAMETER_DESCRIPTION, weights, analyzer_text));
+		query_fields.add(new FieldConfiguration(FIELD_OPERATION_ID, weights, analyzer_id));
+		query_fields.add(new FieldConfiguration(FIELD_OPERATION_DESCRIPTION, weights, analyzer_text));
+		query_fields.add(new FieldConfiguration(FIELD_SERVICE_DESCRIPTION, weights, analyzer_text));
+		query_fields.add(new FieldConfiguration(FIELD_ALL_PROPERTIES, weights, analyzer_id));
+		query_fields.add(new FieldConfiguration(FIELD_ALL_INPUTS, weights, analyzer_id));
+	
+		/*
 		Collections.sort(query_fields, new Comparator<FieldConfiguration>(){
 			override compare(FieldConfiguration arg0, FieldConfiguration arg1) {
 				if(arg0.weight==arg1.weight){
@@ -398,6 +431,7 @@ class QueryDelegator {
 				}
 			}
 		});
+		*/
 		
 		Collections.reverse(query_fields);
 		
@@ -436,8 +470,18 @@ class QueryDelegator {
 		analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(), analyzerMap);
 	}
 	
-	public def init(Model global){
+	public def void init(Directory i){
+		this.index = i;
+	}
 	
+	public def void setGlobal(Model global){
+		this.global = global;
+	}
+	
+	public def Directory init(Model global){
+	
+		index = new RAMDirectory();
+		
 		this.global = global;
 		
 		//http://lucene.apache.org/core/4_3_0/core/org/apache/lucene/search/package-summary.html#scoringBasics
@@ -497,6 +541,8 @@ class QueryDelegator {
 		}
 		
 		writer.close;
+		
+		return index;
 	}
 	
 }
