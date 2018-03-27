@@ -6,17 +6,23 @@ import de.upb.dbis.astro.QueryDelegator
 import de.upb.dbis.astro.Triple
 import de.upb.dbis.astro.alignment.mysql.SQLConnection
 import de.upb.dbis.astro.alignment.mysql.MySQLAlignmentLoader
+import java.util.Map
+import org.apache.jena.rdf.model.Model
+import org.apache.lucene.store.Directory
 
 class Evaluation {
 	
 	
 	private String path_global_ontology = "C:/Users/Simon/Data/git2/dissertation/implementation/de.upb.is.schemaorg.owl/data/schema.owl.nt";
 	private String path_testcollection = "C:/Users/Simon/Data/git2/dissertation/implementation/de.upb.is.sme2/testcollections/unnormalized/htdocs/"; 
+	private Map<String, Float> weights;
+	private static Model schemaorg;
+	private static Directory index;
 	
-	public static def main(String[] args){
+	public static def void main(String[] args){
 		
 		
-		if(args.size==2){
+		if(args.size!=2){
 			
 			System.out.println(
 			'''
@@ -39,7 +45,27 @@ class Evaluation {
 	new(String globalontology, String testcollection){
 		this.path_global_ontology = globalontology;
 		this.path_testcollection = testcollection;
+		
+		if(schemaorg===null){
+			
+			schemaorg = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+			schemaorg.read(path_global_ontology);
+		}
+		
 	}
+	
+	new(String globalontology, String testcollection, Map<String, Float> weights){
+		this.path_global_ontology = globalontology;
+		this.path_testcollection = testcollection;
+		this.weights = weights;
+		if(schemaorg===null){
+			
+			schemaorg = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+			schemaorg.read(path_global_ontology);
+		}
+	}
+	
+	
 	
 	/*
 	public def validate(){
@@ -57,7 +83,7 @@ class Evaluation {
 	*/
 	
 	
-	public def run(){
+	public def double run(){
 		
 		var actual_true_positives = 0d;
 		var actual_true_negatives = 0d;
@@ -68,12 +94,28 @@ class Evaluation {
 		
 		
 		
-		var schemaorg = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
-		schemaorg.read(path_global_ontology);
+		var matcher2 = null as QueryDelegator;
 		
-		var matcher2 = new QueryDelegator();
+		if(weights!==null){
+			
+			matcher2 = new QueryDelegator(weights);
+		}
+		else{
+			matcher2 = new QueryDelegator();
+		}
+		
 		matcher2.init();
-		matcher2.init(schemaorg);
+		
+		
+		if(index===null){
+			
+			index = matcher2.init(schemaorg);
+		}
+		else{
+			matcher2.setGlobal(schemaorg);
+			matcher2.init(index);
+		}
+				
 		
 		var map = new AveragePrecision();
 		
@@ -197,7 +239,9 @@ class Evaluation {
 								Mean Average Precision: «mean_average_precision»
 								Mean Average Precision2: «mean_average_precision»
 							'''
-		);	
+		);
+		
+		return mean_average_precision;
 		
 	}
 	
