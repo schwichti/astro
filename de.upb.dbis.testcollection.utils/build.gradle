@@ -1,0 +1,15 @@
+plugins {
+  id "org.xtext.xtend" version "1.0.21"
+}
+dependencies {
+	
+	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: '2.13.0'
+
+	compile group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.6.0'
+	
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+    
+    compile project(':de.upb.dbis.commons')
+}
+
