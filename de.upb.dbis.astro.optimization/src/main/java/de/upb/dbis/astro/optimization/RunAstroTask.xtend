@@ -35,6 +35,7 @@ class RunAstroTask implements TaskCreator, Callable<OptimizationResult> {
 		
 		var score = scoreFunction.score(candidate.value, dataProvider, null);
 		
+		System.out.println('''score: «score»''');
 		
 		var result = new OptimizationResult(candidate, null, score, candidate.index, null, new MyCandidateInfo(CandidateStatus.Complete));
 		

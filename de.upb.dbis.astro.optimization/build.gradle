@@ -11,5 +11,9 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    
+    compile project(':de.upb.dbis.commons')
+    compile project(':de.upb.dbis.astro')
+    compile project(':de.upb.dbis.astro.evaluation')
 }
 
