@@ -1,6 +1,9 @@
+## Preparations
+Software you need:
+* Java (http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* Gradle (https://gradle.org/install/)
 
-
-## Setting up Eclipse workspace
+## Building Astro
 Clone this repository:
 ```bash
 git clone git@github.com:schwichti/astro.git
@@ -11,23 +14,22 @@ Open terminal and change directory to astro repository:
 cd astro
 ```
 
-Download gradle wrapper (see https://docs.gradle.org/current/userguide/gradle_wrapper.html):
-```bash
-gradle wrapper
-```
-
 Build Astro
 ```bash
 ./gradlew build
 ```
+
+## Setting up Eclipse workspace
+Build Astro (see above)
 
 Generate Eclipse projects
 ```bash
 ./gradlew eclipse
 ```
 
-Download latest version of Eclipse
+Download latest version of Eclipse (http://www.eclipse.org/downloads/)
 
+Many classes of Astro are written in Xtend (https://www.eclipse.org/xtend/). Xtend adds syntactic sugar on top of Java.
 Install Xtend Eclipse plugins
 http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/
 
