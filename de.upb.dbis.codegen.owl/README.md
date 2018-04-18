@@ -105,10 +105,11 @@ An alignment maps the types of owls:Inputs, owls:Outputs, owl:DatatypeProperties
 Type | URL | Subject | Predicate | Object
 --- | --- | --- | --- | ---
 owls:Input | #countryCode | Country | identifier | Text
-owl:DatatypeProperty | #referencescountriesbycountrycodeget_countryresource_countries_country_countrycode | Country | identifier | Text
+owl:DatatypeProperty | #references...countrycode | Country | identifier | Text
 owls:Output | #Response | Country | - | -
 
 Concerning mappings of owls:Outputs: The predicate and object are always empty as they are not necessary for code generation.
+The short notation for triples is like so: <Country, identifier, Text>.
 
 
 # Code Generation
@@ -125,7 +126,9 @@ Each of the methods consists of three parts:
 ## From Output Mapping
 
 The code generator creates a Java method for every owls:AtomicProcess.
+The concept id of the owls:AtomicProcess is exactly the same as the operationId from the swagger specification.
 The return type of this Java method corresponds to the type of its owls:Output.
+The type of owls:Output #Response is mapped to the triple <Country, - , ->.
 
 ```java
 public Country ReferencesCountriesByCountryCodeGet(/*...*/){
@@ -139,7 +142,6 @@ public Country ReferencesCountriesByCountryCodeGet(/*...*/){
 ## From Input Mapping
 
 The parameters of the Java method correspond to owls:Inputs:
-
 ```java
 public Country ReferencesCountriesByCountryCodeGet(Country country){...}
 ```
