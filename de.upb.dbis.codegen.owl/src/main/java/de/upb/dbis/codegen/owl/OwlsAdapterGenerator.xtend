@@ -2,14 +2,64 @@ package de.upb.dbis.codegen.owl
 
 import org.apache.jena.rdf.model.Resource
 import org.apache.jena.rdf.model.Model
-import de.upb.dbis.openapi.model.Operation
 import de.upb.dbis.astro.OWLUtil
-import de.upb.dbis.astro.Triple
 import de.upb.dbis.astro.OWLS
 import de.upb.dbis.astro.ReferenceAlignment
 import de.upb.dbis.astro.OWLS_EXT
+import org.apache.jena.vocabulary.OWL
+import org.apache.jena.vocabulary.RDFS
+import io.swagger.models.Swagger
+import io.swagger.models.Operation
+import java.io.File
+import org.apache.jena.ontology.OntModelSpec
+import org.apache.jena.rdf.model.ModelFactory
+import io.swagger.models.parameters.QueryParameter
+import io.swagger.models.parameters.PathParameter
+import io.swagger.models.parameters.HeaderParameter
+import org.apache.jena.rdf.model.Property
+import org.apache.jena.rdf.model.RDFNode
 
 class OwlsAdapterGenerator {
+	
+	private static SchemaorgTypeTranslator schemaorg2java = new SchemaorgTypeTranslator();
+	
+	protected def xsd2java(Resource resource){
+		
+		return xsd2java(resource.URI);
+		
+		/*
+		if(resource.localName.toLowerCase.equals("string")){
+			
+			return "String";
+		}
+		else if(resource.localName.toLowerCase.equals("integer")){
+			return "Integer";
+		}
+		else if(resource.localName.toLowerCase.equals("double")){
+			return "Double";
+		}
+		else if(resource.localName.toLowerCase.equals("boolean")){
+			return "Boolean";
+		}
+		*/
+	}
+	
+	protected def xsd2java(String uri){
+		
+		if(uri.toLowerCase.endsWith("string")){
+			
+			return "String";
+		}
+		else if(uri.toLowerCase.endsWith("integer")){
+			return "Integer";
+		}
+		else if(uri.toLowerCase.endsWith("double")){
+			return "Double";
+		}
+		else if(uri.toLowerCase.endsWith("boolean")){
+			return "Boolean";
+		}
+	}	
 	
 	protected def convertType(String type, String format){
 		if(type.equals("integer")){
@@ -66,50 +116,126 @@ class OwlsAdapterGenerator {
 		}
 	}
 	
- 	public def sig(Operation operation, Model servicemodel, Model domainmodel, ReferenceAlignment grounding){
+	public def x(String htdocs_directory, ReferenceAlignment grounding, Swagger swagger){
+		
+		
+		return 
+		'''
+		package de.upb.dbis.astro;
+		
+		import org.schema;
+		import com.jayway.jsonpath.JsonPath;
+		import io.swagger.client.ApiException;
+		import io.swagger.client.api.DefaultApi;
+		
+		public class Adapter{
+			
+			private DefaultApi openapi = new DefaultApi();
+			
+			«FOR File file : new File(htdocs_directory+"/services/").listFiles»
+				«sig(file.absolutePath, file.absolutePath.replace("\\services\\","/ontology/").replace(".owls",".owl"), grounding, swagger)»
+			«ENDFOR»
+		}
+		'''
+	}
+	
+	
+	/**
+	 * @see https://github.com/swagger-api/swagger-codegen-generators/blob/master/src/main/resources/v2/Java/libraries/jersey2/api.mustache
+	 */
+ 	private def sig(String patha, String pathb, ReferenceAlignment grounding, Swagger swagger){
+		
+		var servicemodel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		servicemodel.read(patha);
+		
+		var domainmodel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
+		domainmodel.read(pathb);
+		
+		var atomic_process = OWLUtil.listInstances(servicemodel, OWLS.ATOMIC_PROCESS)?.get(0);
+		var atomic_process_local_name = atomic_process.localName;
+		var operation = null as Operation;
+		
+		for(String path : swagger?.paths?.keySet){
+			
+			for(Operation op : swagger?.paths?.get(path)?.operations){
+				
+				if(op.operationId.equals(atomic_process_local_name)){
+					operation = op;
+				}
+			}
+		}
 		
 		var output = OWLUtil.listInstances(servicemodel, OWLS.OUTPUT).iterator.next;
 		//FIXME assure there is at most one output
-		var output_parametertype = OWLUtil.getLiteral(servicemodel, output, OWLS.PARAMETER_TYPE)
+		var output_parametertype = OWLUtil.getLiteral(servicemodel, output, OWLS.PARAMETER_TYPE);
+		var output_type = grounding.get(output_parametertype)?.subject?.localName ?: "String";
+		
 		var inputs = OWLUtil.listInstances(servicemodel, OWLS.INPUT);
-		var triple2 = null as Triple;
-		var datatypeproperty = null;
-		'''
-			import org.schema;
-			import com.jayway.jsonpath.JsonPath;
-			import io.swagger.client.ApiException;
-			import io.swagger.client.api.DefaultApi;
-			
-			public class OwlsAdapter{
-				
-				private DefaultApi openapi = new DefaultApi();
-				
-				public «output_parametertype» «operation.operationId» (
+		var datatypeproperties = OWLUtil.listInstances(domainmodel, OWL.DatatypeProperty);
+		var result = '''
+				public «output_type» «operation.operationId» (
 					«FOR Resource input : inputs SEPARATOR ', '»
-						«OWLUtil.getLiteral(servicemodel, input, OWLS.PARAMETER_TYPE)» «input»
+						«xsd2java(OWLUtil.getLiteral(servicemodel, input, OWLS.PARAMETER_TYPE))» «input.localName»
 					«ENDFOR»){
 					
-					
 					//lowering (OWLS to OpenAPI)
-					«FOR param: operation.pathParameterSubSchema»
+					«FOR param: operation.parameters»
 						«IF grounding.containsKey(param.name)»
 							«var triple = grounding.get(param.name)»
-							«convertType(param.type, param.format)» «param.name» = «triple.subject».get«triple.predicate.localName.toFirstUpper»();
+							«IF param instanceof QueryParameter»
+							«convertType((param as QueryParameter).type, (param as QueryParameter).format)» «param.name» = «triple.subject».get«triple.predicate.localName.toFirstUpper»();
+							«ELSEIF param instanceof PathParameter»
+							«convertType((param as PathParameter).type, (param as PathParameter).format)» «param.name» = «triple.subject».get«triple.predicate.localName.toFirstUpper»();
+							«ELSEIF param instanceof HeaderParameter»
+							«convertType((param as HeaderParameter).type, (param as HeaderParameter).format)» «param.name» = «triple.subject».get«triple.predicate.localName.toFirstUpper»();
+							«ENDIF»
 						«ENDIF»
 					«ENDFOR»
-					String response = openapi.«operation.operationId»(«FOR param: operation.pathParameterSubSchema SEPARATOR ', '»«param.name»«ENDFOR»);
+					String response = openapi.«operation.operationId»(«FOR param: operation.parameters SEPARATOR ', '»«param.name»«ENDFOR»);
 					
 					//lifting (OpenAPI to OWLS)
-					«output_parametertype» result = new «output_parametertype»();
+					«output_type» result = new «output_type»();
 					
-					
-					/*lefturi -> <Subject, Predicate, Object>*/
-					«triple2.subject.localName» «triple2.subject.localName.toFirstLower» = new «triple2.subject.localName»();
-					«triple2.subject.localName.toFirstLower».set«triple2.predicate»(JsonPath.parse(response).read(«OWLUtil.getLiteral(domainmodel, datatypeproperty, OWLS_EXT.JSONPATH)»", String.class));
+					«FOR datatypeProperty: datatypeproperties»
+						
+						«var range = OWLUtil.listRange(datatypeProperty).get(0)»
+						«var tripleX = grounding.get(datatypeProperty.URI)»
+						
+						«IF tripleX!==null»
+							//Mapping: «datatypeProperty.URI» -> «tripleX»
+							//TODO: assign «tripleX?.subject?.localName.toFirstLower» to a property of result
+							«tripleX.subject.localName» «tripleX.subject.localName.toFirstLower» = new «tripleX.subject.localName»();
+							
+							«IF isCompatible(tripleX.predicate, datatypeProperty)»
+								«xsd2java(range)» «tripleX.predicate.localName» = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
+								«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.predicate.localName»);
+							«ELSE»
+								//TODO: assign «range» to a property of «tripleX.object.localName.toFirstLower»
+								«tripleX.object.localName» «tripleX.object.localName.toFirstLower» = new «tripleX.object.localName»();
+								«xsd2java(range)» «range» = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
+								«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.object.localName.toFirstLower»);
+							«ENDIF»
+						«ENDIF»
+						
+					«ENDFOR»
 					
 					return result;
 				}
 			}
 		'''
+		
+		return result.toString;
 	}
+	
+	private def isCompatible(Resource property1, Resource property2){
+		
+		
+		var range1 = OWLUtil.listRange(property1).map[Resource r| schemaorg2java.translateType(r)];
+		var range2 = OWLUtil.listRange(property2).map[Resource r| xsd2java(r)];
+		
+		range1.retainAll(range2); 
+		
+		return !range1.isEmpty; 
+	}
+	
 }
