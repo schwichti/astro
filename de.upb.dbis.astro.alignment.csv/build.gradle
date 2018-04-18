@@ -1,0 +1,14 @@
+plugins {
+  id "org.xtext.xtend" version "1.0.21"
+}
+
+dependencies {
+	
+	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: '2.13.0'
+	
+	testImplementation 'junit:junit:4.12'
+	  
+	compile project(':de.upb.dbis.astro')
+	compile project(':de.upb.dbis.commons')
+}
+

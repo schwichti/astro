@@ -17,6 +17,8 @@ import org.apache.jena.ontology.OntModelSpec
 import org.apache.jena.rdf.model.ModelFactory
 import de.upb.dbis.json2owl.Json2Owl
 import de.upb.dbis.astro.alignment.mysql.MySQLAlignmentLoader
+import de.upb.dbis.openapi.model.OpenapiPackage
+import de.upb.dbis.openapi.json.JsonResourceFactoryImpl
 
 class Transformation {
 	
@@ -35,6 +37,9 @@ class Transformation {
 	public static def void main(String[] args){
 		var transformation = new Transformation();
 		
+		transformation.configure();
+		
+		/*
 		if(args.length==2){
 			transformation.sourcePath = args.get(0);
 			transformation.targetPath = args.get(1);
@@ -44,18 +49,41 @@ class Transformation {
 		else if(args.length==3){
 			transformation.sourcePath = args.get(0);
 			transformation.targetPath = args.get(1);
-			transformation.schemaorgFile = args.get(3);
+			transformation.schemaorgFile = args.get(2);
 			
 			transformation.configureNormalized.main;
 		}
 		else{
 			System.out.println("Usage: <openapi source folder> <target folder> (<path to global ontology>)?");
 		}
+		*/
+		
+	}
+	
+	private def configure(){
+		targetPath = "C:/Users/Simon/Data/git2/astro/de.upb.dbis.examples.lufthansa";
+		targetFolder = new File(targetPath+"/htdocs/services");
+		targetFolder2 = new File(targetPath+"/htdocs/ontology");
+		
+		OpenapiPackageImpl.init();
+		
+		var xmiutil = new XmiUtil();
+		xmiutil.registerURI(OpenapiPackage.eNS_URI, OpenapiPackage.eINSTANCE);
+		xmiutil.registerExtension("json", new JsonResourceFactoryImpl());
+		
+		
+		var contents = xmiutil.load(new File("C:/Users/Simon/Data/git2/astro/de.upb.dbis.examples.lufthansa/LH_public_API_swagger_2_0_modified.json"));
+		var swagger = contents.get(0) as Swagger;
+		
+		process(swagger);
 		
 		
 	}
 	
+	
 	private def configureUnnormalized(){
+		sourceFolder = new File(sourcePath);
+		
 		targetFolder = new File(targetPath+"/htdocs/services");
 		targetFolder2 = new File(targetPath+"/htdocs/ontology");
 		sourceFiles = new ArrayList<File>(sourceFolder.listFiles);
@@ -64,6 +92,7 @@ class Transformation {
 	}
 	
 	private def configureNormalized(){
+		sourceFolder = new File(sourcePath);
 		targetFolder = new File(targetPath+"/htdocs/services");
 		targetFolder2 = new File(targetPath+"/htdocs/ontology");
 		
@@ -80,6 +109,28 @@ class Transformation {
 	}
 	
 	
+	private def void process(Swagger swagger){
+	    if(swagger.paths!==null){
+        	
+            for(PathItem path : swagger.paths.pathItem){
+            	
+            	handleOperation2(swagger, path.get, "get", swagger.host);
+            	handleOperation2(swagger, path.post, "post", swagger.host);
+            	handleOperation2(swagger, path.put, "put", swagger.host);
+            	handleOperation2(swagger, path.delete, "delete", swagger.host);
+            	handleOperation2(swagger, path.patch, "patch", swagger.host);
+            	
+            	handleOperation(path.get, "get", swagger.host);
+            	handleOperation(path.post, "post", swagger.host);
+            	handleOperation(path.put, "put", swagger.host);
+            	handleOperation(path.delete, "delete", swagger.host);
+            	handleOperation(path.patch, "patch", swagger.host);
+            	
+            }
+        }
+
+	}
+	
 	public def void main(){
 		
 		OpenapiPackageImpl.init();
@@ -95,27 +146,13 @@ class Transformation {
 	            
 	            var spec = contents.get(0) as Swagger;
 	            
-	            if(spec.paths!==null){
-	            	
-		            for(PathItem path : spec.paths.pathItem){
-		            	
-		            	handleOperation2(spec, path.get, "get", spec.host);
-		            	handleOperation2(spec, path.post, "post", spec.host);
-		            	handleOperation2(spec, path.put, "put", spec.host);
-		            	handleOperation2(spec, path.delete, "delete", spec.host);
-		            	handleOperation2(spec, path.patch, "patch", spec.host);
-		            	
-		            	handleOperation(path.get, "get", spec.host);
-		            	handleOperation(path.post, "post", spec.host);
-		            	handleOperation(path.put, "put", spec.host);
-		            	handleOperation(path.delete, "delete", spec.host);
-		            	handleOperation(path.patch, "patch", spec.host);
-		            	
-		            }
-	            }
-	            else{
-	            	System.out.println("no paths in "+fileEntry.absolutePath);
-	            }
+	           	if(spec.paths!==null){
+	           		
+					process(spec);
+	           	}
+			    else{
+		        	System.out.println("no paths in "+fileEntry.absolutePath);
+		        }
 
 	        } 
 

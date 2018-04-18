@@ -27,7 +27,6 @@ class MAPScore implements ScoreFunction {
 			var path_testcollection = "C:/Users/Simon/Data/git2/dissertation/implementation/de.upb.is.sme2/testcollections/unnormalized/htdocs/";
 			
 			var score = new Evaluation(path_global_ontology,path_testcollection, model).run();
-			//var score = 0.2;
 			
 			System.out.println('''score: «score»''');
 			

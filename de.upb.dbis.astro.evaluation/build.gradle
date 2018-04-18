@@ -6,12 +6,10 @@ dependencies {
 
     compile group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.6.0'
     
-    
-//    compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: '2.13.0'
-	  compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: '2.13.0'
-//	  compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib.macro', version: '2.13.0'
+	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: '2.13.0'
     
     compile project(':de.upb.dbis.astro')
+    compile project(':de.upb.dbis.commons')
     compile project(':de.upb.dbis.astro.alignment.mysql')
 }
 

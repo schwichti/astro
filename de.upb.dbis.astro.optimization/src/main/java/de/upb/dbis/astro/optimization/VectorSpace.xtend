@@ -22,13 +22,13 @@ class VectorSpace implements ParameterSpace<Map<String, Float>>{
 		return nestedSpaces;
 	}
 	
+	
 	override getValue(double[] parameterValues) {
 		
 		var candidate = new LinkedHashMap<String, Float>();
 		
 		
 		for(String key:nestedSpaces.keySet){
-			
 			var component = (nestedSpaces.get(key).getValue(parameterValues) as Integer) + 0f;
 			
 			candidate.put(key,component);

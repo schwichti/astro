@@ -9,6 +9,9 @@ import de.upb.dbis.astro.alignment.mysql.MySQLAlignmentLoader
 import java.util.Map
 import org.apache.jena.rdf.model.Model
 import org.apache.lucene.store.Directory
+import java.util.HashMap
+import java.util.ArrayList
+import de.upb.dbis.commons.FileWriter
 
 class Evaluation {
 	
@@ -36,10 +39,36 @@ class Evaluation {
 		}
 		else{
 			
-			new Evaluation(args.get(0), args.get(1)).run();
+			//leave_one_out(args.get(0), args.get(1));
+			//all_one(args.get(0), args.get(1));
+			
+			var weights = #{
+				QueryDelegator.FIELD_CLASS_LABEL -> 7f,
+				QueryDelegator.FIELD_CLASS_COMMENT -> 2f,
+				QueryDelegator.FIELD_CLASS_SUPER -> 0f,
+				QueryDelegator.FIELD_CLASS_SUB -> 5f,
+				QueryDelegator.FIELD_CLASS_PROPERTIES -> 9f,
+				QueryDelegator.FIELD_PROPERTY_LABEL -> 6f,
+				QueryDelegator.FIELD_PROPERTY_COMMENT -> 3f,
+				QueryDelegator.FIELD_OBJECT_LABEL -> 7f,
+				QueryDelegator.FIELD_CONCEPTNET_RELATED -> 11f,
+				QueryDelegator.FIELD_CONCEPTNET_SYNONYM -> 10f,
+				
+				QueryDelegator.FIELD_RESOURCE_LABEL->6f,
+				QueryDelegator.FIELD_JSONPATH -> 5f,
+				QueryDelegator.FIELD_PARAMETER_DESCRIPTION -> 5f,
+				QueryDelegator.FIELD_OPERATION_ID -> 4f,
+				QueryDelegator.FIELD_OPERATION_DESCRIPTION-> 0f,
+				QueryDelegator.FIELD_SERVICE_DESCRIPTION -> 0f,
+				QueryDelegator.FIELD_ALL_PROPERTIES -> 0f,
+				QueryDelegator.FIELD_ALL_INPUTS -> 1f
+			};
+//			
+			new Evaluation(args.get(0), args.get(1),weights).run();
+			
+			
 		}
 		
-
 	}
 	
 	new(String globalontology, String testcollection){
@@ -63,6 +92,95 @@ class Evaluation {
 			schemaorg = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 			schemaorg.read(path_global_ontology);
 		}
+	}
+	
+	public static def all_one(String globalontology, String testcollection){
+		var weights = #{
+			QueryDelegator.FIELD_CLASS_LABEL -> 1f,
+			QueryDelegator.FIELD_CLASS_COMMENT -> 1f,
+			QueryDelegator.FIELD_CLASS_SUPER -> 1f,
+			QueryDelegator.FIELD_CLASS_SUB -> 1f,
+			QueryDelegator.FIELD_CLASS_PROPERTIES -> 1f,
+			QueryDelegator.FIELD_PROPERTY_LABEL -> 1f,
+			QueryDelegator.FIELD_PROPERTY_COMMENT -> 1f,
+			QueryDelegator.FIELD_OBJECT_LABEL -> 1f,
+			QueryDelegator.FIELD_CONCEPTNET_RELATED -> 1f,
+			QueryDelegator.FIELD_CONCEPTNET_SYNONYM -> 1f,
+			
+			QueryDelegator.FIELD_RESOURCE_LABEL->1f,
+			QueryDelegator.FIELD_JSONPATH -> 1f,
+			QueryDelegator.FIELD_PARAMETER_DESCRIPTION -> 1f,
+			QueryDelegator.FIELD_OPERATION_ID -> 1f,
+			QueryDelegator.FIELD_OPERATION_DESCRIPTION-> 1f,
+			QueryDelegator.FIELD_SERVICE_DESCRIPTION -> 1f,
+			QueryDelegator.FIELD_ALL_PROPERTIES -> 1f,
+			QueryDelegator.FIELD_ALL_INPUTS -> 1f
+		};
+		
+		new Evaluation(globalontology, testcollection, weights).run();
+	}
+	
+	public static def leave_one_out(String globalontology, String testcollection){
+
+		var filename = "leaveoneout.csv";
+		
+		var weights = #{
+			QueryDelegator.FIELD_CLASS_LABEL -> 7f,
+			QueryDelegator.FIELD_CLASS_COMMENT -> 2f,
+			QueryDelegator.FIELD_CLASS_SUPER -> 4f,
+			QueryDelegator.FIELD_CLASS_SUB -> 0f,
+			QueryDelegator.FIELD_CLASS_PROPERTIES -> 9f,
+			QueryDelegator.FIELD_PROPERTY_LABEL -> 6f,
+			QueryDelegator.FIELD_PROPERTY_COMMENT -> 0f,
+			QueryDelegator.FIELD_OBJECT_LABEL -> 0f,
+			QueryDelegator.FIELD_CONCEPTNET_RELATED -> 11f,
+			QueryDelegator.FIELD_CONCEPTNET_SYNONYM -> 10f,
+			
+			QueryDelegator.FIELD_RESOURCE_LABEL->6f,
+			QueryDelegator.FIELD_JSONPATH -> 5f,
+			QueryDelegator.FIELD_PARAMETER_DESCRIPTION -> 5f,
+			QueryDelegator.FIELD_OPERATION_ID -> 4f,
+			QueryDelegator.FIELD_OPERATION_DESCRIPTION-> 0f,
+			QueryDelegator.FIELD_SERVICE_DESCRIPTION -> 2f,
+			QueryDelegator.FIELD_ALL_PROPERTIES -> 0f,
+			QueryDelegator.FIELD_ALL_INPUTS -> 0f
+		};
+		
+		var keys = new ArrayList<String>(weights.keySet);
+		
+		var buffer = new StringBuffer();
+		
+		for(String key :keys){
+			
+			buffer.append('''"«key»";''');
+		}
+		buffer.append("score\n");
+		
+		new FileWriter("./").write(filename, buffer.toString, false);
+		
+		
+		for(String key: weights.keySet){
+			
+			buffer = new StringBuffer();
+			
+			var weights_prime = new HashMap<String, Float>(weights);
+			
+			weights_prime.put(key, 0f);
+			
+			var evaluation = new Evaluation(globalontology, testcollection, weights_prime);
+			var result = evaluation.run();
+			
+			for(String key2 :keys){
+			
+				buffer.append('''"«weights_prime.get(key2)»";''');
+				
+			}
+			
+			buffer.append(result+"\n");
+			
+			new FileWriter("./").write(filename, buffer.toString, true);
+		}
+		
 	}
 	
 	

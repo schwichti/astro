@@ -148,7 +148,7 @@ public class Evaluator {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(665, 353);
+		shell.setSize(1215, 757);
 		shell.setText("ASTRO");
 		shell.setLayout(new GridLayout(1, false));
 		
@@ -298,7 +298,7 @@ public class Evaluator {
 
 			
 			TreeItem properties = new TreeItem(selectedItem, SWT.NONE);
-			properties.setText("properties");
+			properties.setText("outputs");
 			
 			for(DatatypeProperty p:OWLUtil.listDatatypeProperties(domain)){
 				TreeItem propertyItem = new TreeItem(properties, SWT.NONE);
@@ -330,6 +330,7 @@ public class Evaluator {
 		Color green = new Color (Display.getCurrent(), 198, 239, 206);
 		Color blue = new Color (Display.getCurrent(), 173, 197, 231);
 
+		/*
 		if(referenceAlignment.containsKey(r.getURI())&& referenceAlignment.get(r.getURI())!=null){
 			
 			Triple t = referenceAlignment.get(r.getURI());
@@ -340,6 +341,8 @@ public class Evaluator {
 			item.setText(3, "?");
 			item.setBackground(blue);
 		}
+		
+		*/
 		
 		if(actualAlignment.containsKey(r.getURI())){
 			
@@ -354,7 +357,7 @@ public class Evaluator {
 					item.setText(3, score+"");
 					
 					if(referenceAlignment.containsKey(r.getURI()) && t.equals(referenceAlignment.get(r.getURI()))){
-						item.setBackground(green);
+						//item.setBackground(green);
 					}
 					
 				}

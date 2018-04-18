@@ -8,8 +8,12 @@ import java.util.Date
 import java.util.Map
 import de.upb.dbis.commons.FileWriter
 import org.deeplearning4j.arbiter.optimize.api.saving.ResultReference
+import java.util.ArrayList
+import java.util.Collections
 
 class CSVResultSaver implements ResultSaver {
+	
+	
 	
 	override getSupportedCandidateTypes() {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
@@ -32,17 +36,18 @@ class CSVResultSaver implements ResultSaver {
 
 		var candidate = result.candidate.value;		
 		
+		
 		if(candidate instanceof Map){
 			
-			for(var iter=candidate.keySet.iterator; iter.hasNext;){
-				var key = iter.next;
+			var keys = new ArrayList<String>(candidate.keySet);
+			Collections.sort(keys);
+			
+			for(String key:keys){
 				var value = candidate.get(key);
-				
 				buffer.append(value);
-				
 				buffer.append(";");
-				
 			}
+			
 			
 			buffer.append(result.score);
 			buffer.append("\n");

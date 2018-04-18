@@ -39,6 +39,7 @@ import org.apache.lucene.queryparser.classic.MultiFieldQueryParser
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.RAMDirectory
+import org.apache.lucene.analysis.en.EnglishPossessiveFilterFactory
 
 class QueryDelegator {
 	
@@ -80,6 +81,29 @@ class QueryDelegator {
 	private Analyzer analyzer_conceptnet = null;
 	private Analyzer analyzer_conceptnet_synonym = null;
 	
+	
+	public static Map<String, Float> defaultWeights = #{
+			FIELD_CLASS_LABEL -> 7f,
+			FIELD_CLASS_COMMENT -> 2f,
+			FIELD_CLASS_SUPER -> 4f,
+			FIELD_CLASS_SUB -> 5f,
+			FIELD_CLASS_PROPERTIES -> 9f,
+			FIELD_PROPERTY_LABEL -> 6f,
+			FIELD_PROPERTY_COMMENT -> 3f,
+			FIELD_OBJECT_LABEL -> 7f,
+			FIELD_CONCEPTNET_RELATED -> 11f,
+			FIELD_CONCEPTNET_SYNONYM -> 10f,
+			
+			FIELD_RESOURCE_LABEL->6f,
+			FIELD_JSONPATH -> 5f,
+			FIELD_PARAMETER_DESCRIPTION -> 5f,
+			FIELD_OPERATION_ID -> 4f,
+			FIELD_OPERATION_DESCRIPTION-> 3f,
+			FIELD_SERVICE_DESCRIPTION -> 2f,
+			FIELD_ALL_PROPERTIES -> 1f,
+			FIELD_ALL_INPUTS -> 1f
+		};
+		
 	private Map<String, Float> weights;
 	
 	private List<FieldConfiguration> index_fields = new ArrayList<FieldConfiguration>();
@@ -96,27 +120,7 @@ class QueryDelegator {
 	}
 	
 	new(){
-		this.weights = #{
-			FIELD_CLASS_LABEL -> 7f,
-			FIELD_CLASS_COMMENT -> 2f,
-			FIELD_CLASS_SUPER -> 4f,
-			FIELD_CLASS_SUB -> 5f,
-			FIELD_CLASS_PROPERTIES -> 9f,
-			FIELD_PROPERTY_LABEL -> 6f,
-			FIELD_PROPERTY_COMMENT -> 3f,
-			FIELD_OBJECT_LABEL -> 7f,
-			FIELD_CONCEPTNET_RELATED -> 11f,
-			FIELD_CONCEPTNET_SYNONYM -> 10f,
-			
-			FIELD_RESOURCE_LABEL->6f,
-			FIELD_JSONPATH -> 5f,
-			FIELD_PARAMETER_DESCRIPTION -> 5f,
-			FIELD_OPERATION_ID -> 4f,
-			FIELD_OPERATION_DESCRIPTION-> 0f,
-			FIELD_SERVICE_DESCRIPTION -> 0f,
-			FIELD_ALL_PROPERTIES -> 0f,
-			FIELD_ALL_INPUTS -> 1f
-		}
+		this.weights = defaultWeights;
 
 	}
 	
@@ -226,7 +230,7 @@ class QueryDelegator {
 				terms = normalize(field.analyzer, input);
 				
 				if(!terms.empty){
-					//terms.removeAll(duplicates);
+					terms.removeAll(duplicates);
 					query.put(terms, field.weight);
 					duplicates.addAll(terms);
 					
@@ -417,7 +421,6 @@ class QueryDelegator {
 		query_fields.add(new FieldConfiguration(FIELD_ALL_PROPERTIES, weights, analyzer_id));
 		query_fields.add(new FieldConfiguration(FIELD_ALL_INPUTS, weights, analyzer_id));
 	
-		/*
 		Collections.sort(query_fields, new Comparator<FieldConfiguration>(){
 			override compare(FieldConfiguration arg0, FieldConfiguration arg1) {
 				if(arg0.weight==arg1.weight){
@@ -431,7 +434,6 @@ class QueryDelegator {
 				}
 			}
 		});
-		*/
 		
 		Collections.reverse(query_fields);
 		

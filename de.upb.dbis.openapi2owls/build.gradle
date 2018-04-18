@@ -19,6 +19,7 @@ dependencies {
     
     
     compile project(':de.upb.dbis.openapi.model')
+    compile project(':de.upb.dbis.openapi.json')
 	compile project(':de.upb.dbis.json2owl')
 	compile project(':de.upb.dbis.astro')
 	compile project(':de.upb.dbis.astro.alignment.mysql')

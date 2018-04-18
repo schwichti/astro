@@ -21,6 +21,10 @@ import org.apache.jena.ontology.ObjectProperty
 
 class OWLUtil {
 	
+
+
+	
+	
 	public static def getDomains33(Property property){
 		
 		var statements = property.model.listStatements(property, RDFS.domain, null as Resource);
@@ -31,14 +35,20 @@ class OWLUtil {
 		return result;
 	}
 	
-	public static def listRange(Resource r){
+	public static def listRange(Model model, Resource r){
 		
-		var statements = r.model.listStatements(r, RDFS.range, null as Resource);
+		var statements = model.listStatements(r, RDFS.range, null as Resource);
 		var result = new ArrayList<Resource>();
 		for(Statement stmt:statements.toList){
 			result.add(stmt.object.asResource);
 		}
 		return result;
+	}
+	
+	public static def listRange(Resource r){
+		
+		return listRange(r.model, r);
+		
 	}
 	
 	public static def listDomain(Resource r){

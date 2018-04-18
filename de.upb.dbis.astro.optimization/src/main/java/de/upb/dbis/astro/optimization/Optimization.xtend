@@ -44,10 +44,11 @@ class Optimization {
 		
 		
 		var candidateGenerator = new RandomSearchGenerator(parameterspace, null);
+		candidateGenerator.rngSeed = 1L;
 		
 		var scoreFunction = new MAPScore();
 		
-		var terminationCondition = new MaxTimeCondition(10, TimeUnit.MINUTES);
+		var terminationCondition = new MaxTimeCondition(60, TimeUnit.MINUTES);
 		
 		var configuration = new OptimizationConfiguration.Builder()
                 .candidateGenerator(candidateGenerator)
