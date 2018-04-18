@@ -124,7 +124,6 @@ Each of the methods consists of three parts:
 2. The underlying REST API is called with the translated inputs.
 3. The lifting translation converts the response message of the REST API to an object structure that conforms to the global ontology.
 
-
 ## From Output Mapping
 
 The code generator creates a Java method for every owls:AtomicProcess.
@@ -145,7 +144,7 @@ public Country ReferencesCountriesByCountryCodeGet(/*...*/){
 
 The parameters of the Java method correspond to owls:Inputs:
 ```java
-public Country ReferencesCountriesByCountryCodeGet(Country country){...}
+public Country ReferencesCountriesByCountryCodeGet(Country country){/*...*/}
 ```
 
 ## From DatatypeProperty Mapping
@@ -158,4 +157,30 @@ Country country = new Country(); //subject is Country
 
 String identifier = JsonPath.parse(response).read("$.CountryResource.Countries.Country.CountryCode", String.class); //object is Text (String)
 country.setIdentifier(identifier); //predicate is identifier
+```
+
+## Complete Adapter Logic
+
+```java
+public Country ReferencesCountriesByCountryCodeGet(
+				Country countryCode /*, ...*/
+				) throws ApiException {
+
+	//lowering (OWLS to OpenAPI)
+	// from #countryCode -> <Country, identifier, Text>
+	String countryCode_ = countryCode.getIdentifier();
+
+	String response = openapi.ReferencesCountriesByCountryCodeGet(countryCode_ /*, ...*/); //call REST API
+
+	//lifting (OpenAPI to OWLS)
+	//from #Response -> <Country, -, ->
+	Country result = new Country();
+
+	//from #references...countrycode -> <Country, identifier, Text>
+	Country country = new Country();
+	String identifier = JsonPath.parse(response).read("$.CountryResource.Countries.Country.CountryCode", String.class);
+	country.setIdentifier(identifier);
+
+	return result;
+}
 ```
