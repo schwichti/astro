@@ -182,7 +182,7 @@ class OwlsAdapterGenerator {
 		
 		var output = OWLUtil.listInstances(servicemodel, OWLS.OUTPUT).iterator.next;
 		//FIXME assure there is at most one output
-		var output_parametertype = OWLUtil.getLiteral(servicemodel, output, OWLS.PARAMETER_TYPE);
+		//var output_parametertype = OWLUtil.getLiteral(servicemodel, output, OWLS.PARAMETER_TYPE);
 		var output_type = grounding.get(output.URI)?.subject?.localName ?: "String";
 		
 		var inputs = OWLUtil.listInstances(servicemodel, OWLS.INPUT);
