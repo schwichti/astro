@@ -24,7 +24,7 @@ class CSVLoader extends AbstractLineProcessor{
 	
 	override readLine(String line) {
 		
-		var parts = line.split(";");
+		var parts = line.split(";",-1);
 		
 		if(parts.size===4){
 			
@@ -39,11 +39,17 @@ class CSVLoader extends AbstractLineProcessor{
 			t.object = schemaorg.getResource("http://schema.org/"+object);
 			
 			alignment.put(lefturi, t)
+		}
+		else{
+			
+			System.out.println(parts);
 		}		
 		
 	}
 	
 	override finish() {
+		
+		System.out.println(alignment);
 	}
 	
 	
