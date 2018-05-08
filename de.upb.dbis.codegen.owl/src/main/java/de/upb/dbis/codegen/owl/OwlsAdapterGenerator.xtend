@@ -183,7 +183,7 @@ class OwlsAdapterGenerator {
 		var output = OWLUtil.listInstances(servicemodel, OWLS.OUTPUT).iterator.next;
 		//FIXME assure there is at most one output
 		var output_parametertype = OWLUtil.getLiteral(servicemodel, output, OWLS.PARAMETER_TYPE);
-		var output_type = grounding.get(output_parametertype)?.subject?.localName ?: "String";
+		var output_type = grounding.get(output.URI)?.subject?.localName ?: "String";
 		
 		var inputs = OWLUtil.listInstances(servicemodel, OWLS.INPUT);
 		var datatypeproperties = OWLUtil.listInstances(domainmodel, OWL.DatatypeProperty);
@@ -224,9 +224,9 @@ class OwlsAdapterGenerator {
 								«xsd2java(range)» «tripleX.predicate.localName» = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
 								«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.predicate.localName»);
 							«ELSE»
-								//TODO: assign «range» to a property of «tripleX.object.localName.toFirstLower»
 								«tripleX.object.localName» «tripleX.object.localName.toFirstLower» = new «tripleX.object.localName»();
-								«xsd2java(range)» «range» = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
+								//TODO: assign range to a property of «tripleX.object.localName.toFirstLower»
+								«xsd2java(range)» range = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
 								«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.object.localName.toFirstLower»);
 							«ENDIF»
 						«ENDIF»

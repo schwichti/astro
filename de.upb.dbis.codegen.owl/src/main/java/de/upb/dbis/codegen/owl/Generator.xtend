@@ -20,7 +20,7 @@ class Generator {
 			var htdocs_directory = args.get(4);
 			
 			var swagger_arguments = '''generate -i «swagger_json» -l java -o «output_directory»''';
-			//SwaggerCodegen.main(swagger_arguments.split(" "));
+			SwaggerCodegen.main(swagger_arguments.split(" "));
 			
 			var schemaorg = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 			schemaorg.read(global_ontology_owl);
