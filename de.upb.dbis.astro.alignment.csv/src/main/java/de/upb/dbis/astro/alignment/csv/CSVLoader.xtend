@@ -33,12 +33,16 @@ class CSVLoader extends AbstractLineProcessor{
 			var predicate = parts.get(2);
 			var object = parts.get(3);
 			
-			var t = new Triple();
-			t.subject = schemaorg.getResource("http://schema.org/"+subject);
-			t.predicate = schemaorg.getResource("http://schema.org/"+predicate);
-			t.object = schemaorg.getResource("http://schema.org/"+object);
+			if(!subject.equals("")){
+				
+				var t = new Triple();
+				t.subject = schemaorg.getResource("http://schema.org/"+subject);
+				t.predicate = if (!predicate.equals("")) schemaorg.getResource("http://schema.org/"+predicate) else null;
+				t.object = if (!object.equals("")) schemaorg.getResource("http://schema.org/"+object) else null;
+				
+				alignment.put(lefturi, t)
+			}
 			
-			alignment.put(lefturi, t)
 		}
 		else{
 			
