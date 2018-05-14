@@ -135,13 +135,12 @@ class OwlsAdapterGenerator {
 		'''
 		package de.upb.dbis.astro;
 		
-		import org.schema;
 		import com.jayway.jsonpath.JsonPath;
 		import io.swagger.client.ApiException;
 		import io.swagger.client.api.DefaultApi;
 		
 		«FOR String class_:imports»
-		import org.schema.«class_»
+		import org.schema.«class_»;
 		«ENDFOR»
 		
 		public class Adapter{
@@ -190,50 +189,49 @@ class OwlsAdapterGenerator {
 		var groundingByName = new HashMap<String, Triple>();
 		
 		var result = '''
-				public «output_type» «atomic_process.localName»(
-					«FOR Resource input : inputs SEPARATOR ', '»
-						«IF grounding.containsKey(input.URI)»
-							«grounding.get(input.URI)?.subject.localName» «input.localName»
-							«{groundingByName.put(input.localName, grounding.get(input.URI)); ""}»
-						«ELSE»
-							«xsd2java(OWLUtil.getLiteral(servicemodel, input, OWLS.PARAMETER_TYPE))» «input.localName»
-						«ENDIF»
-					«ENDFOR») throws ApiException {
-					
-					//lowering (OWLS to OpenAPI)
-					«FOR param: operation.parameters»
-						«IF param instanceof AbstractSerializableParameter»
-							«var param2 = param as AbstractSerializableParameter»
-							«convertType(param2.type, param2.format)» «param.name»_ = «IF groundingByName.containsKey(param2.name)»«param.name».get«groundingByName.get(param2.name).predicate.localName.toFirstUpper»()«ELSEIF param2.required && param2.defaultValue!==null»«param2.defaultValue»«ELSEIF !param2.required»null«ELSE»null«ENDIF»;
-						«ENDIF»
-					«ENDFOR»
-					
-					String response = openapi.«operation.operationId»(«FOR param: operation.parameters SEPARATOR ', '»«param.name»_«ENDFOR»);
+			public «output_type» «atomic_process.localName»(
+				«FOR Resource input : inputs SEPARATOR ', '»
+					«IF grounding.containsKey(input.URI)»
+						«grounding.get(input.URI)?.subject.localName» «input.localName»
+						«{groundingByName.put(input.localName, grounding.get(input.URI)); ""}»
+					«ELSE»
+						«xsd2java(OWLUtil.getLiteral(servicemodel, input, OWLS.PARAMETER_TYPE))» «input.localName»
+					«ENDIF»
+				«ENDFOR») throws ApiException {
+				
+				//lowering (OWLS to OpenAPI)
+				«FOR param: operation.parameters»
+					«IF param instanceof AbstractSerializableParameter»
+						«var param2 = param as AbstractSerializableParameter»
+						«convertType(param2.type, param2.format)» «param.name»_ = «IF groundingByName.containsKey(param2.name)»«param.name».get«groundingByName.get(param2.name).predicate.localName.toFirstUpper»()«ELSEIF param2.required && param2.defaultValue!==null»«param2.defaultValue»«ELSEIF !param2.required»null«ELSE»null«ENDIF»;
+					«ENDIF»
+				«ENDFOR»
+				
+				String response = openapi.«operation.operationId»(«FOR param: operation.parameters SEPARATOR ', '»«param.name»_«ENDFOR»);
 
-					//lifting (OpenAPI to OWLS)
-					«output_type» result = new «output_type»();
-					«FOR datatypeProperty: datatypeproperties»
-						«var range = OWLUtil.listRange(datatypeProperty).get(0)»
-						«var tripleX = grounding.get(datatypeProperty.URI)»
-						«IF tripleX!==null»
-							//Mapping: «datatypeProperty.URI» -> «tripleX»
-							//TODO: assign «tripleX?.subject?.localName.toFirstLower» to a property of result
-							«tripleX.subject.localName» «tripleX.subject.localName.toFirstLower» = new «tripleX.subject.localName»();
-							
-							«IF isCompatible(tripleX.predicate, datatypeProperty)»
-								«xsd2java(range)» «tripleX.predicate.localName» = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
-								«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.predicate.localName»);
-							«ELSE»
-								«tripleX.object.localName» «tripleX.object.localName.toFirstLower» = new «tripleX.object.localName»();
-								//TODO: assign range to a property of «tripleX.object.localName.toFirstLower»
-								«xsd2java(range)» range = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
-								«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.object.localName.toFirstLower»);
-							«ENDIF»
+				//lifting (OpenAPI to OWLS)
+				«output_type» result = new «output_type»();
+				«FOR datatypeProperty: datatypeproperties»
+					«var range = OWLUtil.listRange(datatypeProperty).get(0)»
+					«var tripleX = grounding.get(datatypeProperty.URI)»
+					«IF tripleX!==null»
+						//Mapping: «datatypeProperty.URI» -> «tripleX»
+						//TODO: assign «tripleX?.subject?.localName.toFirstLower» to a property of result
+						«tripleX.subject.localName» «tripleX.subject.localName.toFirstLower» = new «tripleX.subject.localName»();
+						
+						«IF isCompatible(tripleX.predicate, datatypeProperty)»
+							«xsd2java(range)» «tripleX.predicate.localName» = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
+							«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.predicate.localName»);
+						«ELSE»
+							«tripleX.object.localName» «tripleX.object.localName.toFirstLower» = new «tripleX.object.localName»();
+							//TODO: assign range to a property of «tripleX.object.localName.toFirstLower»
+							«xsd2java(range)» range = JsonPath.parse(response).read("«OWLUtil.getLiteral(domainmodel, datatypeProperty, OWLS_EXT.JSONPATH)»", «xsd2java(range)».class);
+							«tripleX.subject.localName.toFirstLower».set«tripleX.predicate.localName.toFirstUpper»(«tripleX.object.localName.toFirstLower»);
 						«ENDIF»
-					«ENDFOR»
-					
-					return result;
-				}
+					«ENDIF»
+				«ENDFOR»
+				
+				return result;
 			}
 		'''
 		
