@@ -113,8 +113,47 @@ class OwlsAdapterGenerator {
 			}
 		}
 		else if(type.equals("boolean")){
-			return "boolean";
+			return "Boolean";
 		}
+	}
+	
+	protected def defaultValue(AbstractSerializableParameter parameter){
+		
+		//Note: "default" has no meaning for required parameters. (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)
+		
+		if(parameter?.type?.equals("integer")){
+			return parameter?.defaultValue ?: "0";
+		}
+		else if(parameter?.type?.equals("number") && parameter?.format?.equals("float")){
+			return parameter?.defaultValue ?: "0";
+		}
+		else if(parameter?.type?.equals("number") && parameter?.format?.equals("double")){
+			return parameter?.defaultValue ?: "0";
+		}
+		else if(parameter?.type?.equals("string") && parameter?.format?.equals("byte")){
+			return parameter?.defaultValue ?: "0";
+		}
+		else if(parameter?.type?.equals("string") && parameter?.format?.equals("binary")){
+			return parameter?.defaultValue ?: "0";
+		}
+		else if(parameter?.type?.equals("string") && parameter?.format?.equals("date")){
+			//TODO parse java.util.Date from defaulValue
+			return parameter?.defaultValue ?: "new java.util.Date()";
+		}
+		else if(parameter?.type?.equals("string") && parameter?.format?.equals("date-time")){
+			//TODO parse java.util.Date from defaulValue
+			return parameter?.defaultValue ?: "new java.util.Date()";
+		}
+		else if(parameter?.type?.equals("string") && parameter?.format?.equals("password")){
+			return '''"«parameter?.defaultValue»"''' ?: "";
+		}
+		else if(parameter?.type?.equals("string")){
+			return '''"«parameter?.defaultValue»"''' ?: "";
+		}
+		else if(parameter?.type?.equals("boolean")){
+			return parameter?.defaultValue ?: "Boolean.FALSE";
+		}
+
 	}
 	
 	public def x(String htdocs_directory, ReferenceAlignment grounding, Swagger swagger){
@@ -137,7 +176,6 @@ class OwlsAdapterGenerator {
 		
 		import com.jayway.jsonpath.JsonPath;
 		import io.swagger.client.ApiException;
-		import io.swagger.client.api.DefaultApi;
 		
 		«FOR String class_:imports»
 		import org.schema.«class_»;
@@ -145,7 +183,6 @@ class OwlsAdapterGenerator {
 		
 		public class Adapter{
 			
-			private DefaultApi openapi = new DefaultApi();
 			
 			«FOR File file : new File(htdocs_directory+"/services/").listFiles»
 				«sig(file.absolutePath, file.absolutePath.replace("\\services\\","/ontology/").replace(".owls",".owl"), grounding, swagger)»
@@ -155,10 +192,14 @@ class OwlsAdapterGenerator {
 	}
 	
 	
+
+	
 	/**
 	 * @see https://github.com/swagger-api/swagger-codegen-generators/blob/master/src/main/resources/v2/Java/libraries/jersey2/api.mustache
 	 */
  	private def sig(String patha, String pathb, ReferenceAlignment grounding, Swagger swagger){
+		
+
 		
 		var servicemodel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, null);
 		servicemodel.read(patha);
@@ -177,6 +218,14 @@ class OwlsAdapterGenerator {
 					operation = op;
 				}
 			}
+		}
+		
+		var openapi = "new io.swagger.client.api.DefaultApi()"
+		if(!operation?.tags?.empty){
+			
+			var tag = operation.tags.iterator.next;
+			tag = tag.replace(" ","");
+			openapi = '''new io.swagger.client.api.«tag»Api()'''
 		}
 		
 		var output = OWLUtil.listInstances(servicemodel, OWLS.OUTPUT).iterator.next;
@@ -203,11 +252,11 @@ class OwlsAdapterGenerator {
 				«FOR param: operation.parameters»
 					«IF param instanceof AbstractSerializableParameter»
 						«var param2 = param as AbstractSerializableParameter»
-						«convertType(param2.type, param2.format)» «param.name»_ = «IF groundingByName.containsKey(param2.name)»«param.name».get«groundingByName.get(param2.name).predicate.localName.toFirstUpper»()«ELSEIF param2.required && param2.defaultValue!==null»«param2.defaultValue»«ELSEIF !param2.required»null«ELSE»null«ENDIF»;
+						«convertType(param2.type, param2.format)» «param.name»_ = «IF groundingByName.containsKey(param2.name)»«param.name».get«groundingByName.get(param2.name).predicate.localName.toFirstUpper»()«ELSEIF param2.required»null /*TODO required parameter*/«ELSEIF !param2.required && param2.^default!=null»«defaultValue(param2)»«ELSE»null«ENDIF»;
 					«ENDIF»
 				«ENDFOR»
 				
-				String response = openapi.«operation.operationId»(«FOR param: operation.parameters SEPARATOR ', '»«param.name»_«ENDFOR»);
+				String response = «openapi».«operation.operationId.toFirstLower»(«FOR param: operation.parameters SEPARATOR ', '»«param.name»_«ENDFOR»);
 
 				//lifting (OpenAPI to OWLS)
 				«output_type» result = new «output_type»();
