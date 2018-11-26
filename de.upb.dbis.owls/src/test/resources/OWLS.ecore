@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="owls" nsURI="http://www.daml.org/services/owl-s/1.1/Process.owl"
+    nsPrefix="owls">
+  <eClassifiers xsi:type="ecore:EClass" name="Process"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="composedOf" ordered="false"
+        upperBound="-1" eType="#//ControlConstruct"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="#//ControlConstruct #//ControlConstructList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Split" eSuperTypes="#//ControlConstruct #//ControlConstructBag"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SplitJoin" eSuperTypes="#//ControlConstruct #//ControlConstructBag"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyOrder" eSuperTypes="#//ControlConstruct #//ControlConstructBag"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//ControlConstruct #//ControlConstructBag"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IfThenElse" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1" eType="#//ControlConstruct"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" lowerBound="1" eType="#//ControlConstruct"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Iterate" eSuperTypes="#//ControlConstruct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RepeatWhile" eSuperTypes="#//Iterate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whileProcess" eType="#//ControlConstruct"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepeatUntil" eSuperTypes="#//Iterate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="untilProcess" eType="#//ControlConstruct"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlConstructBag" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//ControlConstruct" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlConstructList" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        upperBound="-1" eType="#//ControlConstruct" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeProcess" eSuperTypes="#//Process">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="composedOf" eType="#//ControlConstruct"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Perform" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" upperBound="-1"
+        eType="#//Process"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:owls="http://www.daml.org/services/owl-s/1.1/Process.owl" xmlns:petrinet="petrinet" xsi:schemaLocation="http://www.daml.org/services/owl-s/1.1/Process.owl OWLS.ecore petrinet PetriNet.ecore">
+  <petrinet:PetriNet>
+    <places xsi:type="petrinet:Place" id="n1"/>
+    <places xsi:type="petrinet:Place" id="n2"/>
+    <places xsi:type="petrinet:Transition" id="t1"/>
+    <arcs id="a1" source="n1" target="t1"/>
+    <arcs id="a2" source="t1" target="n2"/>
+  </petrinet:PetriNet>
+  <owls:CompositeProcess/>
+</xmi:XMI>

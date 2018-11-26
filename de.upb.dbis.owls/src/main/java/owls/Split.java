@@ -13,5 +13,5 @@ package owls;
  * @model
  * @generated
  */
-public interface Split extends ControlConstruct, ControlConstructBag {
+public interface Split extends ControlConstruct {
 } // Split

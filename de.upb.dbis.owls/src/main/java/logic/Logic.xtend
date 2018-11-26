@@ -15,6 +15,13 @@ import java.text.SimpleDateFormat
 import java.io.FileWriter
 import java.util.TimeZone
 import java.lang.ProcessBuilder.Redirect
+import org.eclipse.emf.henshin.model.resource.HenshinResourceSet
+import org.eclipse.emf.henshin.interpreter.impl.EngineImpl
+import org.eclipse.emf.henshin.interpreter.impl.EGraphImpl
+import org.eclipse.emf.henshin.interpreter.impl.RuleApplicationImpl
+import org.eclipse.emf.ecore.resource.Resource
+import java.util.Map
+import org.eclipse.emf.henshin.interpreter.impl.UnitApplicationImpl
 
 class Logic {
 	
@@ -28,7 +35,7 @@ class Logic {
 		//see https://svn.win.tue.nl/repos/prom/Packages/AlphaMiner/Trunk/tests/src-test/org/processmining/tests/alphaminer/AlphaMinerTest.java
 
 		
-		//3. transform to controlconstructs
+		//3. transform to owl-s service protocol
 		
 		//4. measure
 	}
@@ -38,12 +45,17 @@ class Logic {
 		//var pb = new ProcessBuilder("cmd", "/C", "prom.bat", "-l");
 		var dir = new File("./scripts");
 		pb.directory(dir);
-		pb.redirectOutput(Redirect.INHERIT);
-		pb.redirectError(Redirect.INHERIT);
+		//pb.redirectOutput(Redirect.INHERIT);
+		//pb.redirectError(Redirect.INHERIT);
 		var p = pb.start();
+		p.waitFor();
+		
+		p.destroy();
 		
 		
 	}
+	
+
 	
 	/**
 	 * Checks if a trace conforms to a CompositeProcess

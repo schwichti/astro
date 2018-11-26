@@ -2,6 +2,7 @@
  */
 package owls.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -9,11 +10,10 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import owls.AnyOrder;
+import owls.AtomicProcess;
 import owls.Choice;
 import owls.CompositeProcess;
 import owls.ControlConstruct;
-import owls.ControlConstructBag;
-import owls.ControlConstructList;
 import owls.IfThenElse;
 import owls.Iterate;
 import owls.OwlsFactory;
@@ -114,20 +114,6 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass controlConstructBagEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass controlConstructListEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass compositeProcessEClass = null;
 
 	/**
@@ -136,6 +122,13 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 	 * @generated
 	 */
 	private EClass performEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass atomicProcessEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -212,6 +205,15 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getProcess_Name() {
+		return (EAttribute)processEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getControlConstruct() {
 		return controlConstructEClass;
 	}
@@ -223,6 +225,15 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 	 */
 	public EReference getControlConstruct_ComposedOf() {
 		return (EReference)controlConstructEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getControlConstruct_Components() {
+		return (EReference)controlConstructEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -347,42 +358,6 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getControlConstructBag() {
-		return controlConstructBagEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getControlConstructBag_Components() {
-		return (EReference)controlConstructBagEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getControlConstructList() {
-		return controlConstructListEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getControlConstructList_Components() {
-		return (EReference)controlConstructListEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getCompositeProcess() {
 		return compositeProcessEClass;
 	}
@@ -419,6 +394,15 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAtomicProcess() {
+		return atomicProcessEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public OwlsFactory getOwlsFactory() {
 		return (OwlsFactory)getEFactoryInstance();
 	}
@@ -443,9 +427,11 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 
 		// Create classes and their features
 		processEClass = createEClass(PROCESS);
+		createEAttribute(processEClass, PROCESS__NAME);
 
 		controlConstructEClass = createEClass(CONTROL_CONSTRUCT);
 		createEReference(controlConstructEClass, CONTROL_CONSTRUCT__COMPOSED_OF);
+		createEReference(controlConstructEClass, CONTROL_CONSTRUCT__COMPONENTS);
 
 		sequenceEClass = createEClass(SEQUENCE);
 
@@ -469,17 +455,13 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 		repeatUntilEClass = createEClass(REPEAT_UNTIL);
 		createEReference(repeatUntilEClass, REPEAT_UNTIL__UNTIL_PROCESS);
 
-		controlConstructBagEClass = createEClass(CONTROL_CONSTRUCT_BAG);
-		createEReference(controlConstructBagEClass, CONTROL_CONSTRUCT_BAG__COMPONENTS);
-
-		controlConstructListEClass = createEClass(CONTROL_CONSTRUCT_LIST);
-		createEReference(controlConstructListEClass, CONTROL_CONSTRUCT_LIST__COMPONENTS);
-
 		compositeProcessEClass = createEClass(COMPOSITE_PROCESS);
 		createEReference(compositeProcessEClass, COMPOSITE_PROCESS__COMPOSED_OF);
 
 		performEClass = createEClass(PERFORM);
 		createEReference(performEClass, PERFORM__PROCESS);
+
+		atomicProcessEClass = createEClass(ATOMIC_PROCESS);
 	}
 
 	/**
@@ -511,27 +493,25 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 
 		// Add supertypes to classes
 		sequenceEClass.getESuperTypes().add(this.getControlConstruct());
-		sequenceEClass.getESuperTypes().add(this.getControlConstructList());
 		splitEClass.getESuperTypes().add(this.getControlConstruct());
-		splitEClass.getESuperTypes().add(this.getControlConstructBag());
 		splitJoinEClass.getESuperTypes().add(this.getControlConstruct());
-		splitJoinEClass.getESuperTypes().add(this.getControlConstructBag());
 		anyOrderEClass.getESuperTypes().add(this.getControlConstruct());
-		anyOrderEClass.getESuperTypes().add(this.getControlConstructBag());
 		choiceEClass.getESuperTypes().add(this.getControlConstruct());
-		choiceEClass.getESuperTypes().add(this.getControlConstructBag());
 		ifThenElseEClass.getESuperTypes().add(this.getControlConstruct());
 		iterateEClass.getESuperTypes().add(this.getControlConstruct());
 		repeatWhileEClass.getESuperTypes().add(this.getIterate());
 		repeatUntilEClass.getESuperTypes().add(this.getIterate());
 		compositeProcessEClass.getESuperTypes().add(this.getProcess());
 		performEClass.getESuperTypes().add(this.getControlConstruct());
+		atomicProcessEClass.getESuperTypes().add(this.getProcess());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(processEClass, owls.Process.class, "Process", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getProcess_Name(), ecorePackage.getEString(), "name", null, 0, 1, owls.Process.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(controlConstructEClass, ControlConstruct.class, "ControlConstruct", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getControlConstruct_ComposedOf(), this.getControlConstruct(), null, "composedOf", null, 0, -1, ControlConstruct.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getControlConstruct_Components(), this.getControlConstruct(), null, "components", null, 1, -1, ControlConstruct.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sequenceEClass, Sequence.class, "Sequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -555,17 +535,13 @@ public class OwlsPackageImpl extends EPackageImpl implements OwlsPackage {
 		initEClass(repeatUntilEClass, RepeatUntil.class, "RepeatUntil", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRepeatUntil_UntilProcess(), this.getControlConstruct(), null, "untilProcess", null, 0, 1, RepeatUntil.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(controlConstructBagEClass, ControlConstructBag.class, "ControlConstructBag", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getControlConstructBag_Components(), this.getControlConstruct(), null, "components", null, 1, -1, ControlConstructBag.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
-
-		initEClass(controlConstructListEClass, ControlConstructList.class, "ControlConstructList", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getControlConstructList_Components(), this.getControlConstruct(), null, "components", null, 1, -1, ControlConstructList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(compositeProcessEClass, CompositeProcess.class, "CompositeProcess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCompositeProcess_ComposedOf(), this.getControlConstruct(), null, "composedOf", null, 0, 1, CompositeProcess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(performEClass, Perform.class, "Perform", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getPerform_Process(), this.getProcess(), null, "process", null, 0, -1, Perform.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPerform_Process(), this.getProcess(), null, "process", null, 0, 1, Perform.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(atomicProcessEClass, AtomicProcess.class, "AtomicProcess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -8,11 +8,10 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import owls.AnyOrder;
+import owls.AtomicProcess;
 import owls.Choice;
 import owls.CompositeProcess;
 import owls.ControlConstruct;
-import owls.ControlConstructBag;
-import owls.ControlConstructList;
 import owls.IfThenElse;
 import owls.Iterate;
 import owls.OwlsPackage;
@@ -96,7 +95,6 @@ public class OwlsSwitch<T> extends Switch<T> {
 				Sequence sequence = (Sequence)theEObject;
 				T result = caseSequence(sequence);
 				if (result == null) result = caseControlConstruct(sequence);
-				if (result == null) result = caseControlConstructList(sequence);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -104,7 +102,6 @@ public class OwlsSwitch<T> extends Switch<T> {
 				Split split = (Split)theEObject;
 				T result = caseSplit(split);
 				if (result == null) result = caseControlConstruct(split);
-				if (result == null) result = caseControlConstructBag(split);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -112,7 +109,6 @@ public class OwlsSwitch<T> extends Switch<T> {
 				SplitJoin splitJoin = (SplitJoin)theEObject;
 				T result = caseSplitJoin(splitJoin);
 				if (result == null) result = caseControlConstruct(splitJoin);
-				if (result == null) result = caseControlConstructBag(splitJoin);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -120,7 +116,6 @@ public class OwlsSwitch<T> extends Switch<T> {
 				AnyOrder anyOrder = (AnyOrder)theEObject;
 				T result = caseAnyOrder(anyOrder);
 				if (result == null) result = caseControlConstruct(anyOrder);
-				if (result == null) result = caseControlConstructBag(anyOrder);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -128,7 +123,6 @@ public class OwlsSwitch<T> extends Switch<T> {
 				Choice choice = (Choice)theEObject;
 				T result = caseChoice(choice);
 				if (result == null) result = caseControlConstruct(choice);
-				if (result == null) result = caseControlConstructBag(choice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -162,18 +156,6 @@ public class OwlsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case OwlsPackage.CONTROL_CONSTRUCT_BAG: {
-				ControlConstructBag controlConstructBag = (ControlConstructBag)theEObject;
-				T result = caseControlConstructBag(controlConstructBag);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case OwlsPackage.CONTROL_CONSTRUCT_LIST: {
-				ControlConstructList controlConstructList = (ControlConstructList)theEObject;
-				T result = caseControlConstructList(controlConstructList);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case OwlsPackage.COMPOSITE_PROCESS: {
 				CompositeProcess compositeProcess = (CompositeProcess)theEObject;
 				T result = caseCompositeProcess(compositeProcess);
@@ -185,6 +167,13 @@ public class OwlsSwitch<T> extends Switch<T> {
 				Perform perform = (Perform)theEObject;
 				T result = casePerform(perform);
 				if (result == null) result = caseControlConstruct(perform);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case OwlsPackage.ATOMIC_PROCESS: {
+				AtomicProcess atomicProcess = (AtomicProcess)theEObject;
+				T result = caseAtomicProcess(atomicProcess);
+				if (result == null) result = caseProcess(atomicProcess);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -358,36 +347,6 @@ public class OwlsSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Control Construct Bag</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Control Construct Bag</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseControlConstructBag(ControlConstructBag object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Control Construct List</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Control Construct List</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseControlConstructList(ControlConstructList object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Composite Process</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -414,6 +373,21 @@ public class OwlsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePerform(Perform object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Atomic Process</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Atomic Process</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAtomicProcess(AtomicProcess object) {
 		return null;
 	}
 

@@ -139,6 +139,15 @@ public interface OwlsFactory extends EFactory {
 	Perform createPerform();
 
 	/**
+	 * Returns a new object of class '<em>Atomic Process</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Atomic Process</em>'.
+	 * @generated
+	 */
+	AtomicProcess createAtomicProcess();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

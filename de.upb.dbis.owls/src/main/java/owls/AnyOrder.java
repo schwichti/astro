@@ -13,5 +13,5 @@ package owls;
  * @model
  * @generated
  */
-public interface AnyOrder extends ControlConstruct, ControlConstructBag {
+public interface AnyOrder extends ControlConstruct {
 } // AnyOrder

@@ -10,11 +10,10 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import owls.AnyOrder;
+import owls.AtomicProcess;
 import owls.Choice;
 import owls.CompositeProcess;
 import owls.ControlConstruct;
-import owls.ControlConstructBag;
-import owls.ControlConstructList;
 import owls.IfThenElse;
 import owls.Iterate;
 import owls.OwlsPackage;
@@ -126,20 +125,16 @@ public class OwlsAdapterFactory extends AdapterFactoryImpl {
 				return createRepeatUntilAdapter();
 			}
 			@Override
-			public Adapter caseControlConstructBag(ControlConstructBag object) {
-				return createControlConstructBagAdapter();
-			}
-			@Override
-			public Adapter caseControlConstructList(ControlConstructList object) {
-				return createControlConstructListAdapter();
-			}
-			@Override
 			public Adapter caseCompositeProcess(CompositeProcess object) {
 				return createCompositeProcessAdapter();
 			}
 			@Override
 			public Adapter casePerform(Perform object) {
 				return createPerformAdapter();
+			}
+			@Override
+			public Adapter caseAtomicProcess(AtomicProcess object) {
+				return createAtomicProcessAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -316,34 +311,6 @@ public class OwlsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link owls.ControlConstructBag <em>Control Construct Bag</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see owls.ControlConstructBag
-	 * @generated
-	 */
-	public Adapter createControlConstructBagAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link owls.ControlConstructList <em>Control Construct List</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see owls.ControlConstructList
-	 * @generated
-	 */
-	public Adapter createControlConstructListAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link owls.CompositeProcess <em>Composite Process</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -368,6 +335,20 @@ public class OwlsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPerformAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link owls.AtomicProcess <em>Atomic Process</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see owls.AtomicProcess
+	 * @generated
+	 */
+	public Adapter createAtomicProcessAdapter() {
 		return null;
 	}
 

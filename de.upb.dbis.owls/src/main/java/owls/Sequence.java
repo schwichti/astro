@@ -13,5 +13,5 @@ package owls;
  * @model
  * @generated
  */
-public interface Sequence extends ControlConstruct, ControlConstructList {
+public interface Sequence extends ControlConstruct {
 } // Sequence

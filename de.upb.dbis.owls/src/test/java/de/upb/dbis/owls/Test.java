@@ -1,16 +1,11 @@
 package de.upb.dbis.owls;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
 import logic.Logic;
 import owls.AnyOrder;
 import owls.CompositeProcess;
 import owls.ControlConstruct;
 import owls.OwlsFactory;
 import owls.Perform;
-import owls.Sequence;
 
 public class Test {
 

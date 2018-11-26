@@ -13,5 +13,5 @@ package owls;
  * @model
  * @generated
  */
-public interface Choice extends ControlConstruct, ControlConstructBag {
+public interface Choice extends ControlConstruct {
 } // Choice

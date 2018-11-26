@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import owls.AnyOrder;
+import owls.AtomicProcess;
 import owls.Choice;
 import owls.CompositeProcess;
 import owls.ControlConstruct;
@@ -82,6 +83,7 @@ public class OwlsFactoryImpl extends EFactoryImpl implements OwlsFactory {
 			case OwlsPackage.REPEAT_UNTIL: return createRepeatUntil();
 			case OwlsPackage.COMPOSITE_PROCESS: return createCompositeProcess();
 			case OwlsPackage.PERFORM: return createPerform();
+			case OwlsPackage.ATOMIC_PROCESS: return createAtomicProcess();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -215,6 +217,16 @@ public class OwlsFactoryImpl extends EFactoryImpl implements OwlsFactory {
 	public Perform createPerform() {
 		PerformImpl perform = new PerformImpl();
 		return perform;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AtomicProcess createAtomicProcess() {
+		AtomicProcessImpl atomicProcess = new AtomicProcessImpl();
+		return atomicProcess;
 	}
 
 	/**

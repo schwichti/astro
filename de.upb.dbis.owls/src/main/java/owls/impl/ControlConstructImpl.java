@@ -3,11 +3,15 @@
 package owls.impl;
 
 import java.util.Collection;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import owls.ControlConstruct;
 import owls.OwlsPackage;
 
@@ -20,6 +24,7 @@ import owls.OwlsPackage;
  * </p>
  * <ul>
  *   <li>{@link owls.impl.ControlConstructImpl#getComposedOf <em>Composed Of</em>}</li>
+ *   <li>{@link owls.impl.ControlConstructImpl#getComponents <em>Components</em>}</li>
  * </ul>
  *
  * @generated
@@ -34,6 +39,16 @@ public class ControlConstructImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected EList<ControlConstruct> composedOf;
+
+	/**
+	 * The cached value of the '{@link #getComponents() <em>Components</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComponents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ControlConstruct> components;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -71,11 +86,39 @@ public class ControlConstructImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<ControlConstruct> getComponents() {
+		if (components == null) {
+			components = new EObjectContainmentEList<ControlConstruct>(ControlConstruct.class, this, OwlsPackage.CONTROL_CONSTRUCT__COMPONENTS);
+		}
+		return components;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case OwlsPackage.CONTROL_CONSTRUCT__COMPONENTS:
+				return ((InternalEList<?>)getComponents()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case OwlsPackage.CONTROL_CONSTRUCT__COMPOSED_OF:
 				return getComposedOf();
+			case OwlsPackage.CONTROL_CONSTRUCT__COMPONENTS:
+				return getComponents();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -93,6 +136,10 @@ public class ControlConstructImpl extends MinimalEObjectImpl.Container implement
 				getComposedOf().clear();
 				getComposedOf().addAll((Collection<? extends ControlConstruct>)newValue);
 				return;
+			case OwlsPackage.CONTROL_CONSTRUCT__COMPONENTS:
+				getComponents().clear();
+				getComponents().addAll((Collection<? extends ControlConstruct>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -108,6 +155,9 @@ public class ControlConstructImpl extends MinimalEObjectImpl.Container implement
 			case OwlsPackage.CONTROL_CONSTRUCT__COMPOSED_OF:
 				getComposedOf().clear();
 				return;
+			case OwlsPackage.CONTROL_CONSTRUCT__COMPONENTS:
+				getComponents().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -122,6 +172,8 @@ public class ControlConstructImpl extends MinimalEObjectImpl.Container implement
 		switch (featureID) {
 			case OwlsPackage.CONTROL_CONSTRUCT__COMPOSED_OF:
 				return composedOf != null && !composedOf.isEmpty();
+			case OwlsPackage.CONTROL_CONSTRUCT__COMPONENTS:
+				return components != null && !components.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

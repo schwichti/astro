@@ -2,6 +2,7 @@
  */
 package owls;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -66,13 +67,22 @@ public interface OwlsPackage extends EPackage {
 	int PROCESS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROCESS__NAME = 0;
+
+	/**
 	 * The number of structural features of the '<em>Process</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROCESS_FEATURE_COUNT = 0;
+	int PROCESS_FEATURE_COUNT = 1;
 
 	/**
 	 * The number of operations of the '<em>Process</em>' class.
@@ -103,13 +113,22 @@ public interface OwlsPackage extends EPackage {
 	int CONTROL_CONSTRUCT__COMPOSED_OF = 0;
 
 	/**
+	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTROL_CONSTRUCT__COMPONENTS = 1;
+
+	/**
 	 * The number of structural features of the '<em>Control Construct</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTROL_CONSTRUCT_FEATURE_COUNT = 1;
+	int CONTROL_CONSTRUCT_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Control Construct</em>' class.
@@ -119,16 +138,6 @@ public interface OwlsPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTROL_CONSTRUCT_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link owls.ControlConstructList <em>Control Construct List</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see owls.ControlConstructList
-	 * @see owls.impl.OwlsPackageImpl#getControlConstructList()
-	 * @generated
-	 */
-	int CONTROL_CONSTRUCT_LIST = 12;
 
 	/**
 	 * The meta object id for the '{@link owls.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -156,7 +165,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__COMPONENTS = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
+	int SEQUENCE__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
 
 	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
@@ -165,7 +174,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 1;
+	int SEQUENCE_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Sequence</em>' class.
@@ -202,7 +211,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPLIT__COMPONENTS = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
+	int SPLIT__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
 
 	/**
 	 * The number of structural features of the '<em>Split</em>' class.
@@ -211,7 +220,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPLIT_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 1;
+	int SPLIT_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Split</em>' class.
@@ -248,7 +257,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPLIT_JOIN__COMPONENTS = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
+	int SPLIT_JOIN__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
 
 	/**
 	 * The number of structural features of the '<em>Split Join</em>' class.
@@ -257,7 +266,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPLIT_JOIN_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 1;
+	int SPLIT_JOIN_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Split Join</em>' class.
@@ -294,7 +303,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_ORDER__COMPONENTS = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
+	int ANY_ORDER__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
 
 	/**
 	 * The number of structural features of the '<em>Any Order</em>' class.
@@ -303,7 +312,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_ORDER_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 1;
+	int ANY_ORDER_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Any Order</em>' class.
@@ -340,7 +349,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHOICE__COMPONENTS = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
+	int CHOICE__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
 
 	/**
 	 * The number of structural features of the '<em>Choice</em>' class.
@@ -349,7 +358,7 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHOICE_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 1;
+	int CHOICE_FEATURE_COUNT = CONTROL_CONSTRUCT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Choice</em>' class.
@@ -378,6 +387,15 @@ public interface OwlsPackage extends EPackage {
 	 * @ordered
 	 */
 	int IF_THEN_ELSE__COMPOSED_OF = CONTROL_CONSTRUCT__COMPOSED_OF;
+
+	/**
+	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IF_THEN_ELSE__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
 
 	/**
 	 * The feature id for the '<em><b>Then</b></em>' reference.
@@ -435,6 +453,15 @@ public interface OwlsPackage extends EPackage {
 	int ITERATE__COMPOSED_OF = CONTROL_CONSTRUCT__COMPOSED_OF;
 
 	/**
+	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ITERATE__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
+
+	/**
 	 * The number of structural features of the '<em>Iterate</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -470,6 +497,15 @@ public interface OwlsPackage extends EPackage {
 	 * @ordered
 	 */
 	int REPEAT_WHILE__COMPOSED_OF = ITERATE__COMPOSED_OF;
+
+	/**
+	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPEAT_WHILE__COMPONENTS = ITERATE__COMPONENTS;
 
 	/**
 	 * The feature id for the '<em><b>While Process</b></em>' reference.
@@ -518,6 +554,15 @@ public interface OwlsPackage extends EPackage {
 	int REPEAT_UNTIL__COMPOSED_OF = ITERATE__COMPOSED_OF;
 
 	/**
+	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPEAT_UNTIL__COMPONENTS = ITERATE__COMPONENTS;
+
+	/**
 	 * The feature id for the '<em><b>Until Process</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -545,70 +590,6 @@ public interface OwlsPackage extends EPackage {
 	int REPEAT_UNTIL_OPERATION_COUNT = ITERATE_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link owls.ControlConstructBag <em>Control Construct Bag</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see owls.ControlConstructBag
-	 * @see owls.impl.OwlsPackageImpl#getControlConstructBag()
-	 * @generated
-	 */
-	int CONTROL_CONSTRUCT_BAG = 11;
-
-	/**
-	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTROL_CONSTRUCT_BAG__COMPONENTS = 0;
-
-	/**
-	 * The number of structural features of the '<em>Control Construct Bag</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTROL_CONSTRUCT_BAG_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Control Construct Bag</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTROL_CONSTRUCT_BAG_OPERATION_COUNT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTROL_CONSTRUCT_LIST__COMPONENTS = 0;
-
-	/**
-	 * The number of structural features of the '<em>Control Construct List</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTROL_CONSTRUCT_LIST_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Control Construct List</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTROL_CONSTRUCT_LIST_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link owls.impl.CompositeProcessImpl <em>Composite Process</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -616,7 +597,16 @@ public interface OwlsPackage extends EPackage {
 	 * @see owls.impl.OwlsPackageImpl#getCompositeProcess()
 	 * @generated
 	 */
-	int COMPOSITE_PROCESS = 13;
+	int COMPOSITE_PROCESS = 11;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_PROCESS__NAME = PROCESS__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Composed Of</b></em>' containment reference.
@@ -653,7 +643,7 @@ public interface OwlsPackage extends EPackage {
 	 * @see owls.impl.OwlsPackageImpl#getPerform()
 	 * @generated
 	 */
-	int PERFORM = 14;
+	int PERFORM = 12;
 
 	/**
 	 * The feature id for the '<em><b>Composed Of</b></em>' reference list.
@@ -665,7 +655,16 @@ public interface OwlsPackage extends EPackage {
 	int PERFORM__COMPOSED_OF = CONTROL_CONSTRUCT__COMPOSED_OF;
 
 	/**
-	 * The feature id for the '<em><b>Process</b></em>' reference list.
+	 * The feature id for the '<em><b>Components</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERFORM__COMPONENTS = CONTROL_CONSTRUCT__COMPONENTS;
+
+	/**
+	 * The feature id for the '<em><b>Process</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -693,6 +692,44 @@ public interface OwlsPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link owls.impl.AtomicProcessImpl <em>Atomic Process</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see owls.impl.AtomicProcessImpl
+	 * @see owls.impl.OwlsPackageImpl#getAtomicProcess()
+	 * @generated
+	 */
+	int ATOMIC_PROCESS = 13;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOMIC_PROCESS__NAME = PROCESS__NAME;
+
+	/**
+	 * The number of structural features of the '<em>Atomic Process</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOMIC_PROCESS_FEATURE_COUNT = PROCESS_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Atomic Process</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOMIC_PROCESS_OPERATION_COUNT = PROCESS_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link owls.Process <em>Process</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -701,6 +738,17 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getProcess();
+
+	/**
+	 * Returns the meta object for the attribute '{@link owls.Process#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see owls.Process#getName()
+	 * @see #getProcess()
+	 * @generated
+	 */
+	EAttribute getProcess_Name();
 
 	/**
 	 * Returns the meta object for class '{@link owls.ControlConstruct <em>Control Construct</em>}'.
@@ -722,6 +770,17 @@ public interface OwlsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getControlConstruct_ComposedOf();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link owls.ControlConstruct#getComponents <em>Components</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Components</em>'.
+	 * @see owls.ControlConstruct#getComponents()
+	 * @see #getControlConstruct()
+	 * @generated
+	 */
+	EReference getControlConstruct_Components();
 
 	/**
 	 * Returns the meta object for class '{@link owls.Sequence <em>Sequence</em>}'.
@@ -858,48 +917,6 @@ public interface OwlsPackage extends EPackage {
 	EReference getRepeatUntil_UntilProcess();
 
 	/**
-	 * Returns the meta object for class '{@link owls.ControlConstructBag <em>Control Construct Bag</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Control Construct Bag</em>'.
-	 * @see owls.ControlConstructBag
-	 * @generated
-	 */
-	EClass getControlConstructBag();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link owls.ControlConstructBag#getComponents <em>Components</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Components</em>'.
-	 * @see owls.ControlConstructBag#getComponents()
-	 * @see #getControlConstructBag()
-	 * @generated
-	 */
-	EReference getControlConstructBag_Components();
-
-	/**
-	 * Returns the meta object for class '{@link owls.ControlConstructList <em>Control Construct List</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Control Construct List</em>'.
-	 * @see owls.ControlConstructList
-	 * @generated
-	 */
-	EClass getControlConstructList();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link owls.ControlConstructList#getComponents <em>Components</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Components</em>'.
-	 * @see owls.ControlConstructList#getComponents()
-	 * @see #getControlConstructList()
-	 * @generated
-	 */
-	EReference getControlConstructList_Components();
-
-	/**
 	 * Returns the meta object for class '{@link owls.CompositeProcess <em>Composite Process</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -931,15 +948,25 @@ public interface OwlsPackage extends EPackage {
 	EClass getPerform();
 
 	/**
-	 * Returns the meta object for the reference list '{@link owls.Perform#getProcess <em>Process</em>}'.
+	 * Returns the meta object for the reference '{@link owls.Perform#getProcess <em>Process</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Process</em>'.
+	 * @return the meta object for the reference '<em>Process</em>'.
 	 * @see owls.Perform#getProcess()
 	 * @see #getPerform()
 	 * @generated
 	 */
 	EReference getPerform_Process();
+
+	/**
+	 * Returns the meta object for class '{@link owls.AtomicProcess <em>Atomic Process</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Atomic Process</em>'.
+	 * @see owls.AtomicProcess
+	 * @generated
+	 */
+	EClass getAtomicProcess();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -975,6 +1002,14 @@ public interface OwlsPackage extends EPackage {
 		EClass PROCESS = eINSTANCE.getProcess();
 
 		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROCESS__NAME = eINSTANCE.getProcess_Name();
+
+		/**
 		 * The meta object literal for the '{@link owls.impl.ControlConstructImpl <em>Control Construct</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -991,6 +1026,14 @@ public interface OwlsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTROL_CONSTRUCT__COMPOSED_OF = eINSTANCE.getControlConstruct_ComposedOf();
+
+		/**
+		 * The meta object literal for the '<em><b>Components</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTROL_CONSTRUCT__COMPONENTS = eINSTANCE.getControlConstruct_Components();
 
 		/**
 		 * The meta object literal for the '{@link owls.impl.SequenceImpl <em>Sequence</em>}' class.
@@ -1115,42 +1158,6 @@ public interface OwlsPackage extends EPackage {
 		EReference REPEAT_UNTIL__UNTIL_PROCESS = eINSTANCE.getRepeatUntil_UntilProcess();
 
 		/**
-		 * The meta object literal for the '{@link owls.ControlConstructBag <em>Control Construct Bag</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see owls.ControlConstructBag
-		 * @see owls.impl.OwlsPackageImpl#getControlConstructBag()
-		 * @generated
-		 */
-		EClass CONTROL_CONSTRUCT_BAG = eINSTANCE.getControlConstructBag();
-
-		/**
-		 * The meta object literal for the '<em><b>Components</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONTROL_CONSTRUCT_BAG__COMPONENTS = eINSTANCE.getControlConstructBag_Components();
-
-		/**
-		 * The meta object literal for the '{@link owls.ControlConstructList <em>Control Construct List</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see owls.ControlConstructList
-		 * @see owls.impl.OwlsPackageImpl#getControlConstructList()
-		 * @generated
-		 */
-		EClass CONTROL_CONSTRUCT_LIST = eINSTANCE.getControlConstructList();
-
-		/**
-		 * The meta object literal for the '<em><b>Components</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CONTROL_CONSTRUCT_LIST__COMPONENTS = eINSTANCE.getControlConstructList_Components();
-
-		/**
 		 * The meta object literal for the '{@link owls.impl.CompositeProcessImpl <em>Composite Process</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1179,12 +1186,22 @@ public interface OwlsPackage extends EPackage {
 		EClass PERFORM = eINSTANCE.getPerform();
 
 		/**
-		 * The meta object literal for the '<em><b>Process</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Process</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PERFORM__PROCESS = eINSTANCE.getPerform_Process();
+
+		/**
+		 * The meta object literal for the '{@link owls.impl.AtomicProcessImpl <em>Atomic Process</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see owls.impl.AtomicProcessImpl
+		 * @see owls.impl.OwlsPackageImpl#getAtomicProcess()
+		 * @generated
+		 */
+		EClass ATOMIC_PROCESS = eINSTANCE.getAtomicProcess();
 
 	}
 
