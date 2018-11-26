@@ -27,7 +27,7 @@ class TraceReplayTest {
 		
 		var replay = new TraceReplay();
 		var trace = #["a", "b"];
-		var can = replay.canReplay(trace, compositeprocess);
+		var can = replay.canReplayTrace(trace, compositeprocess);
 		
 		assertTrue(can);
 		
@@ -53,7 +53,7 @@ class TraceReplayTest {
 		
 		var replay = new TraceReplay();
 		var trace = #["a", "a"];
-		var can = replay.canReplay(trace, compositeprocess);
+		var can = replay.canReplayTrace(trace, compositeprocess);
 		
 		assertFalse(can);
 		
@@ -80,12 +80,12 @@ class TraceReplayTest {
 		
 		var replay = new TraceReplay();
 		var trace = #["a", "b"];
-		var can = replay.canReplay(trace, compositeprocess);
+		var can = replay.canReplayTrace(trace, compositeprocess);
 		
 		assertTrue(can);
 		
 		trace = #["b", "a"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertTrue(can);
 		
 	}
@@ -111,12 +111,12 @@ class TraceReplayTest {
 		
 		var replay = new TraceReplay();
 		var trace = #["a", "a"];
-		var can = replay.canReplay(trace, compositeprocess);
+		var can = replay.canReplayTrace(trace, compositeprocess);
 		
 		assertFalse(can);
 		
 		trace = #["b", "b"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertFalse(can);
 		
 	}
@@ -141,12 +141,12 @@ class TraceReplayTest {
 		
 		var replay = new TraceReplay();
 		var trace = #["a"];
-		var can = replay.canReplay(trace, compositeprocess);
+		var can = replay.canReplayTrace(trace, compositeprocess);
 		
 		assertTrue(can);
 		
 		trace = #["b"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertTrue(can);
 		
 	}
@@ -194,19 +194,19 @@ class TraceReplayTest {
 		
 		var replay = new TraceReplay();
 		var trace = #["a", "b"];
-		var can = replay.canReplay(trace, compositeprocess);
+		var can = replay.canReplayTrace(trace, compositeprocess);
 		assertTrue(can);
 		
 		trace = #["c", "d"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertTrue(can);
 		
 		trace = #["b", "a"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertFalse(can);
 		
 		trace = #["a", "c"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertFalse(can);
 		
 //		trace = #["a"];
@@ -214,11 +214,11 @@ class TraceReplayTest {
 //		assertFalse(can);
 		
 		trace = #["a", "d"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertFalse(can);
 		
 		trace = #["a", "b", "c"];
-		can = replay.canReplay(trace, compositeprocess);
+		can = replay.canReplayTrace(trace, compositeprocess);
 		assertFalse(can);					
 		
 	}	

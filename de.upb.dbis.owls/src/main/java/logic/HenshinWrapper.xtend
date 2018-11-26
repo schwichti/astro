@@ -11,10 +11,15 @@ import org.eclipse.emf.henshin.model.resource.HenshinResourceSet
 
 class HenshinWrapper {
 	
+	def void transform(String petrinetPath, String henshinPath){
+		var sourceModel = new File(petrinetPath);
+		var henshinModel = new File(henshinPath);
+		
+		transform(sourceModel, henshinModel);	
+	}
 	
 	def void transform(File sourceModel, File henshinModel){
 
-			
 //		var reg = Resource.Factory.Registry.INSTANCE;
 //        var m = reg.getExtensionToFactoryMap();
 //        m.put("pnml", new PetriNetResourceFactoryImpl());
@@ -28,9 +33,7 @@ class HenshinWrapper {
 		
 		var module = resourceSet.getModule(henshinModel.name);
 		
-		
 		var unit = module.getUnit("PetriNet2CompositeProcess") as Rule;
-		
 		
 		//var application = new UnitApplicationImpl(engine, graph, unit, null);
 		var application = new RuleApplicationImpl(engine, graph, unit, null);

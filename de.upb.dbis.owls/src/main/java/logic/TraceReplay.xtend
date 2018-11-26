@@ -3,7 +3,6 @@ package logic
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.List
-import java.util.Queue
 import owls.AnyOrder
 import owls.Choice
 import owls.CompositeProcess
@@ -13,18 +12,37 @@ import owls.Sequence
 
 class TraceReplay {
 
+	private float totalTraces;
+	private float replayableTraces;
+
+	public def getTotalTraces(){
+		return totalTraces;
+	}
+	
+	public def getCompatibleTraces(){
+		return replayableTraces;
+	}		
 
 	/**
 	 * @return List of covered traces
 	 */
-	public def List<List<String>> canReplay2(List<List<String>> traces, CompositeProcess process){
+	public def boolean canReplayTraces(List<List<String>> traces, CompositeProcess process){
 		
 		
 		
-		return null;
+		for(List<String> trace:traces){
+			totalTraces = totalTraces+1;
+			var canReplay = canReplayTrace(trace, process);
+			
+			if(canReplay){
+				replayableTraces=replayableTraces+1;
+			}
+			
+		}
+		
 	}	
 
-	public def boolean canReplay(List<String> trace, CompositeProcess process){
+	public def boolean canReplayTrace(List<String> trace, CompositeProcess process){
 		
 		restart();
 		current = process.composedOf;
@@ -41,14 +59,12 @@ class TraceReplay {
 		return true;
 	}
 	
-
-
-	
 	private HashMap<AnyOrder, List<ControlConstruct>> anyOrderComplete;
 	private ControlConstruct current = null;
 	
 	private def restart(){
 		anyOrderComplete = new HashMap<AnyOrder, List<ControlConstruct>>();
+		totalTraces = replayableTraces = 0;
 	}
 	
 	private def List<ControlConstruct> getCompletion(AnyOrder anyorder){
@@ -59,7 +75,7 @@ class TraceReplay {
 		return anyOrderComplete.get(anyorder);
 	}
 	
-	public def void moveUp(ControlConstruct container, ControlConstruct child){
+	protected def void moveUp(ControlConstruct container, ControlConstruct child){
 		
 		if(container instanceof Sequence){
 			var index = container.components.indexOf(child);
@@ -97,7 +113,7 @@ class TraceReplay {
 		}
 	}
 	
-	public def List<ControlConstruct> findNext(ControlConstruct c){
+	protected def List<ControlConstruct> findNext(ControlConstruct c){
 		
 		var result = new ArrayList<ControlConstruct>();
 		
@@ -132,7 +148,7 @@ class TraceReplay {
 		return result;
 	}
 	
-	public def boolean proceedCut(String operationId){	
+	protected def boolean proceedCut(String operationId){	
 		
 		if(current instanceof Perform){
 			if(operationId.equals(current.process.name)){
